@@ -1,16 +1,26 @@
 package cmdlinehandler
 
-import "flag"
-import "db_proj/define"
+import (
+	"db_proj/define"
+	"flag"
+	"os"
+)
 
 func init() {
 	flag.CommandLine.Init(define.ProjectName, flag.ContinueOnError)
 }
 
-func ParseCommandLine() int {
-	port := flag.Int("p", define.DefaultPort, "the port server listen on")
+func ParseCommandLine() {
+	flag.IntVar(&define.Port, "p", define.Port, "the port server listen on")
+	flag.BoolVar(&define.UseSwagger, "s", define.UseSwagger, "choose whether to use swagger")
+	flag.BoolVar(&define.DebugMode, "d", define.DebugMode, "choose whether to open DebugMode")
+
+	help := flag.Bool("help", false, "print help")
 
 	flag.Parse()
-	
-	return *port
+
+	if *help {
+		flag.Usage()
+		os.Exit(0)
+	}
 }
