@@ -1,10 +1,20 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
+	"db_proj/define"
 	"db_proj/handler"
+
+	_ "db_proj/docs"
+	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func SetRouter(server *gin.Engine) {
-	server.GET("/ping", handler.HandlePing)	
+	//router for swagger
+	if define.UseSwagger {
+		server.GET("swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	}
+
+	server.GET("/ping", handler.HandlePing)
 }

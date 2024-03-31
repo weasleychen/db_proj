@@ -1,0 +1,20 @@
+info:
+  contact: {}
+paths:
+  /ping:
+    get:
+      description: '"ping一下服务器"'
+      parameters:
+      - description: 回复
+        in: query
+        name: message
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: ping
+      tags:
+      - example
+swagger: "2.0"
