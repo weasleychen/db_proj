@@ -17,4 +17,7 @@ func SetRouter(server *gin.Engine) {
 	}
 
 	server.GET("/ping", handler.HandlePing)
+
+	server.POST("/register", handler.HandleRegister)
+	server.POST("/login-by-name", handler.HandleLoginByName)
 }
