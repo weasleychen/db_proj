@@ -9,7 +9,7 @@ const (
 
 // not-export const part
 const (
-	defaultPort       = 80
+	defaultPort       = 10000
 	defaultUseSwagger = false
 	defaultDebugMode  = false
 )
