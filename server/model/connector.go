@@ -44,7 +44,7 @@ func newRedisClient(clientId int) *redis.Client {
 }
 
 var (
-	tokenRedis = redisConnector{clientId: 1}
+	TokenRedisHandler = redisConnector{clientId: 1}
 )
 
 func (obj *redisConnector) GetRedisClient() *redis.Client {

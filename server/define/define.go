@@ -1,6 +1,11 @@
 package define
 
-import "context"
+import (
+	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"time"
+)
 
 // export const part
 const (
@@ -28,3 +33,13 @@ const (
 
 // Redis ctx
 var DefaultRedisContext = context.Background()
+
+// JWT
+var (
+	JWTPrivateToken, _ = rsa.GenerateKey(rand.Reader, 2048)
+)
+
+const (
+	Issuer     = "weasleychen"
+	ExpireTime = 2 * time.Hour
+)

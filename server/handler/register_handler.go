@@ -6,6 +6,7 @@ import (
 	"db_proj/util"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 )
 
 // Register
@@ -31,11 +32,11 @@ func HandleRegister(ctx *gin.Context) {
 	conn := model.NewMySqlConnector()
 	conn.Create(&user)
 	if conn.Error != nil {
-		ctx.JSON(200, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"success": "true",
 		})
 	}

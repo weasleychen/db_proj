@@ -3,13 +3,13 @@ package model
 import "gorm.io/gorm"
 
 type User struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
-	Uin         string `gorm:"column:uin" `
-	Name        string `gorm:"column:name" `
-	Password    string `gorm:"column:password"`
-	PhoneNumber string `gorm:"column:phone_number" `
-	Perm        int    `gorm:"column:perm"`
+	Uin         string `gorm:"column:uin" json:"uin"`
+	Name        string `gorm:"column:name" json:"name"`
+	Password    string `gorm:"column:password" json:"-"`
+	PhoneNumber string `gorm:"column:phone_number" json:"phone_number"`
+	Perm        int    `gorm:"column:perm" json:"perm"`
 }
 
 func (obj *User) TableName() string {

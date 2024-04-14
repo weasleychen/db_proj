@@ -20,4 +20,5 @@ func SetRouter(server *gin.Engine) {
 
 	server.POST("/register", handler.HandleRegister)
 	server.POST("/login-by-name", handler.HandleLoginByName)
+	server.POST("/login-by-token", handler.HandlerJWTLogin)
 }

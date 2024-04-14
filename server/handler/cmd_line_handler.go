@@ -1,4 +1,4 @@
-package cmdlinehandler
+package handler
 
 import (
 	"db_proj/define"

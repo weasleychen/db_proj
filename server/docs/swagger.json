@@ -37,6 +37,32 @@
                 }
             }
         },
+        "/login-by-token": {
+            "post": {
+                "description": "\"登录\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "LoginByJWT",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "\"ping一下服务器\"",

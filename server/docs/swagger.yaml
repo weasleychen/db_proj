@@ -23,6 +23,23 @@ paths:
       summary: LoginByName
       tags:
       - public
+  /login-by-token:
+    post:
+      description: '"登录"'
+      parameters:
+      - description: token
+        in: formData
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: LoginByJWT
+      tags:
+      - public
   /ping:
     get:
       description: '"ping一下服务器"'
