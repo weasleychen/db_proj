@@ -34,8 +34,6 @@ function upenv() {
 
     # go config
     echo_begin "set go env"
-        go env -w GOROOT=$GOROOT
-        go env -w GOPATH=$GOPATH
         go env -w GO111MODULE=on
         go env -w GOPROXY=https://goproxy.cn,direct
     echo_done
@@ -43,6 +41,7 @@ function upenv() {
     # go mod tidy
     echo_begin "go mod tidy"
         cd $project_path/server
+        go install github.com/swaggo/swag/cmd/swag@latest
         go mod tidy
     echo_done
 }
