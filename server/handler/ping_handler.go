@@ -1,6 +1,9 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
 
 // Ping
 // @Summary ping
@@ -11,7 +14,7 @@ import "github.com/gin-gonic/gin"
 // @Router /ping [GET]
 func HandlePing(ctx *gin.Context) {
 	message, _ := ctx.GetQuery("message")
-	ctx.JSON(200, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"success": "true",
 		"data":    "HelloWorld",
 		"message": message,

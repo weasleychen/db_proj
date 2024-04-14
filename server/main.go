@@ -17,8 +17,8 @@ package main
 */
 
 import (
-	"db_proj/cmdlinehandler"
 	"db_proj/define"
+	"db_proj/handler"
 	"db_proj/router"
 	"fmt"
 	"log"
@@ -41,7 +41,7 @@ func StartServer(port int) *gin.Engine {
 }
 
 func main() {
-	cmdlinehandler.ParseCommandLine()
+	handler.ParseCommandLine()
 
 	if define.DebugMode {
 		fmt.Printf("port: %d\nUseSwagger:%v\n", define.Port, define.UseSwagger)

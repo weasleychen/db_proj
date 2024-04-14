@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"db_proj/define"
 	"db_proj/model"
+	"db_proj/util"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"net/http"
 )
 
 // LoginByName
@@ -23,11 +27,28 @@ func HandleLoginByName(ctx *gin.Context) {
 	model.NewMySqlConnector().Where(&user, "name").Find(&user)
 
 	if user.Password == ctx.PostForm("password") {
-		ctx.JSON(200, gin.H{
+		jsonBytes, err := json.Marshal(user)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{})
+			return
+		}
+
+		jsonString := string(jsonBytes)
+		tokenString, err := model.TokenRedisHandler.GetRedisClient().Get(define.DefaultRedisContext, jsonString).Result()
+		if err != nil {
+			tokenString = util.GenJWT()
+		}
+
+		model.TokenRedisHandler.GetRedisClient().Set(define.DefaultRedisContext, tokenString, jsonString, define.ExpireTime)
+		model.TokenRedisHandler.GetRedisClient().Set(define.DefaultRedisContext, jsonString, tokenString, define.ExpireTime)
+
+		ctx.JSON(http.StatusOK, gin.H{
 			"success": "true",
+			"token":   tokenString,
+			"user":    user,
 		})
 	} else {
-		ctx.JSON(200, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 		})
 	}

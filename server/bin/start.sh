@@ -57,7 +57,8 @@ function start_server() {
 
     # run!
     echo_begin "run backend"
-        nohup sbin/db_proj $@ 1>log/log 2>log/error &
+        cd $project_path/server
+        swag init 1>log/log 2>log/error && nohup sbin/db_proj $@ 1>log/log 2>log/error &
     echo_done
 }
 

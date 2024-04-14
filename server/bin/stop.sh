@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pid=$(ps -aux | grep -E "\ssbin/db_proj$" | awk '{ print $2 }')
+pid=$(ps -aux | grep -E "sbin/db_proj" | grep -v "grep" | awk '{ print $2 }')
 
 if [ "$pid" != "" ]
 then
