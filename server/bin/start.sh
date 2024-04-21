@@ -52,7 +52,7 @@ function start_server() {
 
     # compile
     echo_begin "compile"
-        go build -o sbin/db_proj
+        go build -o sbin/db_proj main.go
     echo_done
 
     # run!

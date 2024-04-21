@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
-// export const part
 const (
 	ProjectName = "db_proj"
 )
 
-// not-export const part
+var (
+	ProjectPath = getCurrentFilepath()
+)
+
 const (
 	defaultPort       = 10000
 	defaultUseSwagger = false

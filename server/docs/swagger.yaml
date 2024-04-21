@@ -1,6 +1,37 @@
 info:
   contact: {}
 paths:
+  /admin/add-dish:
+    get:
+      description: '"添加一道菜"'
+      parameters:
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: price
+        in: query
+        name: price
+        required: true
+        type: number
+      - description: discount
+        in: query
+        name: discount
+        required: true
+        type: number
+      - description: detail
+        in: query
+        name: detail
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: AddDish
+      tags:
+      - public
   /login-by-name:
     post:
       description: '"登录"'
