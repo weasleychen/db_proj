@@ -14,7 +14,7 @@ import (
 // @Param token formData string true "token"
 // @Success 200 {json} {}
 // @Router /login-by-token [POST]
-func HandlerJWTLogin(ctx *gin.Context) {
+func HandleJWTLogin(ctx *gin.Context) {
 	tokenString := ctx.PostForm("token")
 
 	user, err := model.TokenRedisHandler.GetRedisClient().Get(define.DefaultRedisContext, tokenString).Result()

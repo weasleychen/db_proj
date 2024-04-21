@@ -5,7 +5,6 @@ import (
 	"db_proj/model"
 	"db_proj/util"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
@@ -27,17 +26,18 @@ func HandleRegister(ctx *gin.Context) {
 		Perm:        define.NormalPerm,
 	}
 
-	log.Println(user)
-
-	conn := model.NewMySqlConnector()
-	conn.Create(&user)
-	if conn.Error != nil {
-		ctx.JSON(http.StatusOK, gin.H{
+	db := model.NewMySqlConnector()
+	if err := db.Create(&user).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
 		})
-	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"success": "true",
-		})
+
+		util.Log("create new user error, new user = %v, err: %v", user, err)
+
+		return
 	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": "true",
+	})
 }

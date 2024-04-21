@@ -14,3 +14,5 @@
 # 启动脚本参数
     -s 启用swagger文档
     -p <port> 指定port为监听端口
+
+需要在server/下创建log文件夹，不然不会保存日志
