@@ -3,6 +3,7 @@ package handler
 import (
 	"db_proj/define"
 	"db_proj/model"
+	msdbcallclient "db_proj/msdbcall/client"
 	"db_proj/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -26,8 +27,9 @@ func HandleRegister(ctx *gin.Context) {
 		Perm:        define.NormalPerm,
 	}
 
-	db := model.NewMySqlConnector()
-	if err := db.Create(&user).Error; err != nil {
+	_, err := msdbcallclient.CallCreateUser(user.Uin, user.Name, user.Password, user.PhoneNumber, user.Perm)
+
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
 		})

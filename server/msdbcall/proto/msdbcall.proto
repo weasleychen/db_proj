@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package msdbcall;
+
+option go_package = ".;msdbcall";
+
+message CreateUserReq {
+    optional string uin = 1;
+    optional string name = 2;
+    optional string password = 3;
+    optional string phone_number = 4;
+    optional int32 perm = 5;
+}
+
+message CreateUserResp {
+    optional string data = 1; // 返回新插入的user的json
+}
+
+message AddDishReq {
+    optional string name = 1;
+    optional double price = 2;
+    optional double discount = 3;
+    optional string detail = 4;
+}
+
+message AddDishResp {
+    optional string data = 1;
+}
+
+service MSDBCall {
+    rpc CreateUser(CreateUserReq) returns(CreateUserResp);
+    rpc AddDish(AddDishReq) returns(AddDishResp);
+}

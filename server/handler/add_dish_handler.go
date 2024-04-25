@@ -2,6 +2,7 @@ package handler
 
 import (
 	"db_proj/model"
+	msdbcallclient "db_proj/msdbcall/client"
 	"db_proj/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -53,7 +54,6 @@ func HandleAddDish(ctx *gin.Context) {
 	}
 
 	// add
-	db := model.NewMySqlConnector()
 	user := model.Dish{
 		Model:    gorm.Model{},
 		Name:     name,
@@ -62,7 +62,9 @@ func HandleAddDish(ctx *gin.Context) {
 		Detail:   detail,
 	}
 
-	if err := db.Create(&user).Error; err != nil {
+	_, err = msdbcallclient.CallAddDish(name, price, discount, detail)
+
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
 			"message": fmt.Sprintf("create new dish into db error"),

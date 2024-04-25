@@ -9,7 +9,7 @@ type User struct {
 	Name        string `gorm:"column:name" json:"name"`
 	Password    string `gorm:"column:password" json:"-"`
 	PhoneNumber string `gorm:"column:phone_number" json:"phone_number"`
-	Perm        int    `gorm:"column:perm" json:"perm"`
+	Perm        int32  `gorm:"column:perm" json:"perm"`
 }
 
 func (obj *User) TableName() string {
