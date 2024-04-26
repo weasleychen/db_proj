@@ -35,7 +35,6 @@ func HandleRegister(ctx *gin.Context) {
 		})
 
 		util.Log("create new user error, new user = %v, err: %v", user, err)
-
 		return
 	}
 
