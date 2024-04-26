@@ -28,7 +28,7 @@ func GetMMDemoClient(address string) (func(), *msdbcall.MSDBCallClient, *context
 }
 
 func CallCreateUser(uin, name, password, phoneNumber string, perm int32) (*msdbcall.CreateUserResp, error) {
-	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCreateNewUserPort)
+	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCreateUserPort)
 	defer callback()
 
 	req := msdbcall.CreateUserReq{}
