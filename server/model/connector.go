@@ -47,6 +47,7 @@ var (
 	TokenRedisHandler = redisConnector{clientId: 1}
 )
 
+// 通过此接口获得实际的redis-cli, 懒汉式加载, redisConnector只是封装了单例
 func (obj *redisConnector) GetRedisClient() *redis.Client {
 	obj.single.Do(func() {
 		obj.client = newRedisClient(obj.clientId)

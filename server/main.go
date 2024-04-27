@@ -16,6 +16,10 @@ package main
 	（7）可根据上述需求进行合适的调整和改变
 */
 
+/* 	待选:
+- 异步日志
+*/
+
 import (
 	"db_proj/define"
 	"db_proj/handler"

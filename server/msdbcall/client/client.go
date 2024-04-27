@@ -53,3 +53,24 @@ func CallAddDish(name string, price, discount float64, detail string) (*msdbcall
 
 	return (*client).AddDish(*ctx, &req)
 }
+
+func CheckUserPassword(name, password string) (*msdbcall.CheckUserPasswordResp, error) {
+	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserPasswordPort)
+	defer callback()
+
+	req := msdbcall.CheckUserPasswordReq{}
+	req.Name = &name
+	req.Password = &password
+
+	return (*client).CheckUserPassword(*ctx, &req)
+}
+
+func CheckUserNameUnique(name string) (*msdbcall.CheckUserNameUniqueResp, error) {
+	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserNameUniquePort)
+	defer callback()
+
+	req := msdbcall.CheckUserNameUniqueReq{}
+	req.Name = &name
+
+	return (*client).CheckUserNameUnique(*ctx, &req)
+}

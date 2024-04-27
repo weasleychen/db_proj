@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.12.4
-// source: msdbcall/proto/msdbcall.proto
+// source: msdbcall.proto
 
 package msdbcall
 
@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type MSDBCallClient interface {
 	CreateUser(ctx context.Context, in *CreateUserReq, opts ...grpc.CallOption) (*CreateUserResp, error)
 	AddDish(ctx context.Context, in *AddDishReq, opts ...grpc.CallOption) (*AddDishResp, error)
+	CheckUserPassword(ctx context.Context, in *CheckUserPasswordReq, opts ...grpc.CallOption) (*CheckUserPasswordResp, error)
+	CheckUserNameUnique(ctx context.Context, in *CheckUserNameUniqueReq, opts ...grpc.CallOption) (*CheckUserNameUniqueResp, error)
 }
 
 type mSDBCallClient struct {
@@ -52,12 +54,32 @@ func (c *mSDBCallClient) AddDish(ctx context.Context, in *AddDishReq, opts ...gr
 	return out, nil
 }
 
+func (c *mSDBCallClient) CheckUserPassword(ctx context.Context, in *CheckUserPasswordReq, opts ...grpc.CallOption) (*CheckUserPasswordResp, error) {
+	out := new(CheckUserPasswordResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/CheckUserPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mSDBCallClient) CheckUserNameUnique(ctx context.Context, in *CheckUserNameUniqueReq, opts ...grpc.CallOption) (*CheckUserNameUniqueResp, error) {
+	out := new(CheckUserNameUniqueResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/CheckUserNameUnique", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MSDBCallServer is the server API for MSDBCall service.
 // All implementations must embed UnimplementedMSDBCallServer
 // for forward compatibility
 type MSDBCallServer interface {
 	CreateUser(context.Context, *CreateUserReq) (*CreateUserResp, error)
 	AddDish(context.Context, *AddDishReq) (*AddDishResp, error)
+	CheckUserPassword(context.Context, *CheckUserPasswordReq) (*CheckUserPasswordResp, error)
+	CheckUserNameUnique(context.Context, *CheckUserNameUniqueReq) (*CheckUserNameUniqueResp, error)
 	mustEmbedUnimplementedMSDBCallServer()
 }
 
@@ -70,6 +92,12 @@ func (UnimplementedMSDBCallServer) CreateUser(context.Context, *CreateUserReq) (
 }
 func (UnimplementedMSDBCallServer) AddDish(context.Context, *AddDishReq) (*AddDishResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddDish not implemented")
+}
+func (UnimplementedMSDBCallServer) CheckUserPassword(context.Context, *CheckUserPasswordReq) (*CheckUserPasswordResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUserPassword not implemented")
+}
+func (UnimplementedMSDBCallServer) CheckUserNameUnique(context.Context, *CheckUserNameUniqueReq) (*CheckUserNameUniqueResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUserNameUnique not implemented")
 }
 func (UnimplementedMSDBCallServer) mustEmbedUnimplementedMSDBCallServer() {}
 
@@ -120,6 +148,42 @@ func _MSDBCall_AddDish_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MSDBCall_CheckUserPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckUserPasswordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).CheckUserPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/CheckUserPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).CheckUserPassword(ctx, req.(*CheckUserPasswordReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MSDBCall_CheckUserNameUnique_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckUserNameUniqueReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).CheckUserNameUnique(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/CheckUserNameUnique",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).CheckUserNameUnique(ctx, req.(*CheckUserNameUniqueReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MSDBCall_ServiceDesc is the grpc.ServiceDesc for MSDBCall service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -135,7 +199,15 @@ var MSDBCall_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "AddDish",
 			Handler:    _MSDBCall_AddDish_Handler,
 		},
+		{
+			MethodName: "CheckUserPassword",
+			Handler:    _MSDBCall_CheckUserPassword_Handler,
+		},
+		{
+			MethodName: "CheckUserNameUnique",
+			Handler:    _MSDBCall_CheckUserNameUnique_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "msdbcall/proto/msdbcall.proto",
+	Metadata: "msdbcall.proto",
 }

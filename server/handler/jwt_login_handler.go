@@ -2,7 +2,7 @@ package handler
 
 import (
 	"db_proj/define"
-	"db_proj/model"
+	"db_proj/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -17,8 +17,8 @@ import (
 func HandleJWTLogin(ctx *gin.Context) {
 	tokenString := ctx.PostForm("token")
 
-	user, err := model.TokenRedisHandler.GetRedisClient().Get(define.DefaultRedisContext, tokenString).Result()
-	if err != nil {
+	valid, user := util.CheckToken(tokenString)
+	if valid {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "true",
 			"user":    user,
@@ -26,6 +26,7 @@ func HandleJWTLogin(ctx *gin.Context) {
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
+			"ret":     define.ErrorTokenInvalid,
 		})
 	}
 }
