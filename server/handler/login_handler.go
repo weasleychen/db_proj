@@ -3,6 +3,7 @@ package handler
 import (
 	"db_proj/define"
 	"db_proj/model"
+	msdbcallclient "db_proj/msdbcall/client"
 	"db_proj/util"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
@@ -24,9 +25,18 @@ func HandleLoginByName(ctx *gin.Context) {
 		Name:  ctx.PostForm("name"),
 		Perm:  0,
 	}
-	model.NewMySqlConnector().Where(&user, "name").Find(&user)
 
-	if user.Password == ctx.PostForm("password") {
+	resp, err := msdbcallclient.CheckUserPassword(user.Name, user.Password)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"success": "false",
+		})
+
+		util.Log("CheckUserPassword Error, err: %v", err)
+		return
+	}
+
+	if *resp.Success {
 		jsonBytes, err := json.Marshal(user)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{})
@@ -34,13 +44,7 @@ func HandleLoginByName(ctx *gin.Context) {
 		}
 
 		jsonString := string(jsonBytes)
-		tokenString, err := model.TokenRedisHandler.GetRedisClient().Get(define.DefaultRedisContext, jsonString).Result()
-		if err != nil {
-			tokenString = util.GenJWT()
-		}
-
-		model.TokenRedisHandler.GetRedisClient().Set(define.DefaultRedisContext, tokenString, jsonString, define.ExpireTime)
-		model.TokenRedisHandler.GetRedisClient().Set(define.DefaultRedisContext, jsonString, tokenString, define.ExpireTime)
+		tokenString := util.GenJWT(jsonString)
 
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "true",
@@ -50,6 +54,7 @@ func HandleLoginByName(ctx *gin.Context) {
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
+			"ret":     define.ErrorWrongPassword,
 		})
 	}
 }

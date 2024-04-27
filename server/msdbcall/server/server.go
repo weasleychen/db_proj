@@ -25,6 +25,8 @@ func RegisterNewHandler(address string, handler msdbcall.MSDBCallServer) error {
 func main() {
 	go RegisterNewHandler(":"+define.MSDBCallCreateUserPort, &service.CreateUserServer{})
 	go RegisterNewHandler(":"+define.MSDBCallAddDishPort, &service.AddDishServer{})
+	go RegisterNewHandler(":"+define.MSDBCallCheckUserPasswordPort, &service.CheckUserPasswordServer{})
+	go RegisterNewHandler(":"+define.MSDBCallCheckUserNameUniquePort, &service.CheckUserNameUniqueServer{})
 
 	select {}
 }

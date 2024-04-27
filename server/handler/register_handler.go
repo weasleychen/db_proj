@@ -27,7 +27,26 @@ func HandleRegister(ctx *gin.Context) {
 		Perm:        define.NormalPerm,
 	}
 
-	_, err := msdbcallclient.CallCreateUser(user.Uin, user.Name, user.Password, user.PhoneNumber, user.Perm)
+	resp, err := msdbcallclient.CheckUserNameUnique(user.Name)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"success": "false",
+		})
+
+		util.Log("CheckUserNameUnique Error, err: %v", err)
+		return
+	}
+
+	if !*resp.Unique {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"ret":     define.ErrorDuplicateUserName,
+		})
+
+		return
+	}
+
+	_, err = msdbcallclient.CallCreateUser(user.Uin, user.Name, user.Password, user.PhoneNumber, user.Perm)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

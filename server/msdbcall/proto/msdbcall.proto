@@ -27,7 +27,26 @@ message AddDishResp {
     optional string data = 1;
 }
 
+message CheckUserPasswordReq {
+    optional string name = 1;
+    optional string password = 2;
+}
+
+message CheckUserPasswordResp {
+    optional bool success = 1;
+}
+
+message CheckUserNameUniqueReq {
+    optional string name = 1;
+}
+
+message CheckUserNameUniqueResp {
+    optional bool unique = 1;
+}
+
 service MSDBCall {
     rpc CreateUser(CreateUserReq) returns(CreateUserResp);
     rpc AddDish(AddDishReq) returns(AddDishResp);
+    rpc CheckUserPassword(CheckUserPasswordReq) returns(CheckUserPasswordResp);
+    rpc CheckUserNameUnique(CheckUserNameUniqueReq) returns(CheckUserNameUniqueResp);
 }
