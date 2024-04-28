@@ -5,6 +5,7 @@ import (
 	"db_proj/model"
 	msdbcallclient "db_proj/msdbcall/client"
 	"db_proj/util"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -46,8 +47,10 @@ func HandleRegister(ctx *gin.Context) {
 		return
 	}
 
+	json.Unmarshal([]byte(*resp.Data), &user)
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": "true",
-		"user":    *resp.Data,
+		"user":    user,
 	})
 }
