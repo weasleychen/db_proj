@@ -1,7 +1,8 @@
 package define
 
 const (
-	ErrorDuplicateUserName = iota
+	OK = iota
+	ErrorDuplicateUserName
 	ErrorWrongPassword
 	ErrorTokenInvalid
 )

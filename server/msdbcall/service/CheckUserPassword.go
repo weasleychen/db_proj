@@ -19,7 +19,7 @@ func (server *CheckUserPasswordServer) CheckUserPassword(ctx context.Context, re
 	resp := msdbcall.CheckUserPasswordResp{Success: &success}
 
 	user := model.User{}
-	if err := db.Where(&model.User{Name: *req.Name, Password: *req.Password}).First(&user).Error; err != nil {
+	if err := db.Where("name = ? and password = ?", *req.Name, *req.Password).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			*resp.Success = false
 			return &resp, nil

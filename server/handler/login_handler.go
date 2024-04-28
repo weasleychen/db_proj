@@ -21,9 +21,10 @@ import (
 // @Router /login-by-name [POST]
 func HandleLoginByName(ctx *gin.Context) {
 	user := model.User{
-		Model: gorm.Model{},
-		Name:  ctx.PostForm("name"),
-		Perm:  0,
+		Model:    gorm.Model{},
+		Name:     ctx.PostForm("name"),
+		Password: ctx.PostForm("password"),
+		Perm:     0,
 	}
 
 	resp, err := msdbcallclient.CheckUserPassword(user.Name, user.Password)
