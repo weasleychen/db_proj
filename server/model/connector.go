@@ -55,3 +55,9 @@ func (obj *redisConnector) GetRedisClient() *redis.Client {
 
 	return obj.client
 }
+
+// auto gen
+func init() {
+	db := NewMySqlConnector()
+	db.AutoMigrate(&User{}, &Dish{})
+}
