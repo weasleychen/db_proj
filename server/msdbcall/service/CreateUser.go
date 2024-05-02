@@ -16,11 +16,11 @@ type CreateUserServer struct {
 
 func (server *CreateUserServer) CreateUser(ctx context.Context, req *msdbcall.CreateUserReq) (*msdbcall.CreateUserResp, error) {
 	user := model.User{
-		Uin:         *req.Uin,
-		Name:        *req.Name,
-		Password:    *req.Password,
-		PhoneNumber: *req.PhoneNumber,
-		Perm:        *req.Perm,
+		Uin:         *req.User.Uin,
+		Name:        *req.User.Name,
+		Password:    *req.User.Password,
+		PhoneNumber: *req.User.PhoneNumber,
+		Perm:        *req.User.Perm,
 	}
 
 	resp := msdbcall.CreateUserResp{}

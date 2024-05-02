@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+// 更新本proto时改为 "model/proto;model_pb"
+option go_package = "db_proj/model/proto;model_pb";
+
+package model;
+
+message User {
+    optional string uin = 1;
+    optional string name = 2;
+    optional string password = 3;
+    optional string phone_number = 4;
+    optional int32 perm = 5;
+}
+
+message Dish {
+    optional string name = 1;
+    optional double price = 2;
+    optional double discount = 3;
+    optional string detail = 4;
+}

@@ -13,10 +13,10 @@ type AddDishServer struct {
 
 func (server *AddDishServer) AddDish(ctx context.Context, req *msdbcall.AddDishReq) (*msdbcall.AddDishResp, error) {
 	dish := model.Dish{}
-	dish.Name = *req.Name
-	dish.Price = *req.Price
-	dish.Discount = *req.Discount
-	dish.Detail = *req.Detail
+	dish.Name = *req.Dish.Name
+	dish.Price = *req.Dish.Price
+	dish.Discount = *req.Dish.Discount
+	dish.Detail = *req.Dish.Detail
 
 	db := model.NewMySqlConnector()
 	if err := db.Create(&dish).Error; err != nil {

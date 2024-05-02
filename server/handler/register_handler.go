@@ -28,7 +28,7 @@ func HandleRegister(ctx *gin.Context) {
 		Perm:        define.NormalPerm,
 	}
 
-	resp, err := msdbcallclient.CallCreateUser(user.Uin, user.Name, user.Password, user.PhoneNumber, user.Perm)
+	resp, err := msdbcallclient.CallCreateUser(user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",

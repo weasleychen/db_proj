@@ -40,6 +40,8 @@ func HandleAddDish(ctx *gin.Context) {
 			"success": "false",
 			"message": fmt.Sprintf("the price which is %s can't convert to a float(double) type, INVALID!", priceString),
 		})
+
+		util.Log("price which is %s can't convert to a float(double) type, INVALID!", priceString)
 		return
 	}
 
@@ -50,11 +52,13 @@ func HandleAddDish(ctx *gin.Context) {
 			"success": "false",
 			"message": fmt.Sprintf("the discount which is %s can't convert to a float(double) type, INVALID!", discountString),
 		})
+
+		util.Log("discount which is %s can't convert to a float(double) type, INVALID!", discountString)
 		return
 	}
 
 	// add
-	user := model.Dish{
+	dish := model.Dish{
 		Model:    gorm.Model{},
 		Name:     name,
 		Price:    price,
@@ -62,7 +66,7 @@ func HandleAddDish(ctx *gin.Context) {
 		Detail:   detail,
 	}
 
-	_, err = msdbcallclient.CallAddDish(name, price, discount, detail)
+	_, err = msdbcallclient.CallAddDish(dish)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -70,13 +74,12 @@ func HandleAddDish(ctx *gin.Context) {
 			"message": fmt.Sprintf("create new dish into db error"),
 		})
 
-		// write into log
-		util.Log("insert dish into db error, new dish = %v, error: %v", user, err)
-
+		util.Log("insert dish into db error, new dish = %v, error: %v", dish, err)
 		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": "true",
 	})
+	util.Log("insert dish into db success, new dish = %v", dish)
 }
