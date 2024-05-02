@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+package mstablemgr;
+
+option go_package = ".;mstablemgr";
+
+// 开台
+message OpenTableReq {
+}
+
+message OpenTableResp {
+}
+
+// 换台
+message ChangeTableReq {
+}
+
+message ChangeTableResp {
+}
+
+// 结台
+message CompleteTableReq {
+}
+
+message CompleteTableResp {
+}
+
+// 获取点菜详情
+message GetOrderDetailReq {
+}
+
+message GetOrderDetailResp {
+}
+
+// 加台
+message AddTableReq {
+}
+
+message AddTableResp {
+}
+
+// 减台
+message DelTableReq {
+}
+
+message DelTableResp {
+}
+
+service MSTableMgr {
+  rpc OpenTable(OpenTableReq) returns (OpenTableResp);
+  rpc ChangeTable(ChangeTableReq) returns (ChangeTableResp);
+  rpc CompleteTable(CompleteTableReq) returns (CompleteTableResp);
+  rpc GetOrderDetail(GetOrderDetailReq) returns (GetOrderDetailResp);
+  rpc AddTable(AddTableReq) returns (AddTableResp);
+  rpc DelTable(DelTableReq) returns (DelTableResp);
+}
