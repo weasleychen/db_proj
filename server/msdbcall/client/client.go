@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"db_proj/define"
+	"db_proj/model"
 	"db_proj/msdbcall/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -27,29 +28,29 @@ func GetMMDemoClient(address string) (func(), *msdbcall.MSDBCallClient, *context
 	return callback, &mmdemoclient, &ctx
 }
 
-func CallCreateUser(uin, name, password, phoneNumber string, perm int32) (*msdbcall.CreateUserResp, error) {
+func CallCreateUser(user model.User) (*msdbcall.CreateUserResp, error) {
 	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCreateUserPort)
 	defer callback()
 
 	req := msdbcall.CreateUserReq{}
-	req.Uin = &uin
-	req.Name = &name
-	req.Password = &password
-	req.PhoneNumber = &phoneNumber
-	req.Perm = &perm
+	req.User.Uin = &user.Uin
+	req.User.Name = &user.Name
+	req.User.Password = &user.Password
+	req.User.PhoneNumber = &user.PhoneNumber
+	req.User.Perm = &user.Perm
 
 	return (*client).CreateUser(*ctx, &req)
 }
 
-func CallAddDish(name string, price, discount float64, detail string) (*msdbcall.AddDishResp, error) {
+func CallAddDish(dish model.Dish) (*msdbcall.AddDishResp, error) {
 	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallAddDishPort)
 	defer callback()
 
 	req := msdbcall.AddDishReq{}
-	req.Name = &name
-	req.Price = &price
-	req.Discount = &discount
-	req.Detail = &detail
+	req.Dish.Name = &dish.Name
+	req.Dish.Price = &dish.Price
+	req.Dish.Discount = &dish.Discount
+	req.Dish.Detail = &dish.Detail
 
 	return (*client).AddDish(*ctx, &req)
 }

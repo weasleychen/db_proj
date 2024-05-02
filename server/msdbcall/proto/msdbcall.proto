@@ -4,12 +4,10 @@ package msdbcall;
 
 option go_package = ".;msdbcall";
 
+import "model/model.proto";
+
 message CreateUserReq {
-    optional string uin = 1;
-    optional string name = 2;
-    optional string password = 3;
-    optional string phone_number = 4;
-    optional int32 perm = 5;
+    optional model.User user = 1;
 }
 
 message CreateUserResp {
@@ -18,10 +16,7 @@ message CreateUserResp {
 }
 
 message AddDishReq {
-    optional string name = 1;
-    optional double price = 2;
-    optional double discount = 3;
-    optional string detail = 4;
+    optional model.Dish dish = 1;
 }
 
 message AddDishResp {
