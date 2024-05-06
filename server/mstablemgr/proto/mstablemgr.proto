@@ -6,9 +6,12 @@ option go_package = ".;mstablemgr";
 
 // 开台
 message OpenTableReq {
+    optional int32 table_id = 1;
+    optional bool wal = 2;
 }
 
 message OpenTableResp {
+    optional int32 status = 1;
 }
 
 // 换台
@@ -20,9 +23,12 @@ message ChangeTableResp {
 
 // 结台
 message CompleteTableReq {
+    optional int32 table_id = 1;
+    optional bool wal = 2;
 }
 
 message CompleteTableResp {
+    optional int32 status = 1;
 }
 
 // 获取点菜详情
@@ -46,11 +52,24 @@ message DelTableReq {
 message DelTableResp {
 }
 
+message GetTablesStatusReq {
+}
+
+message TableInfo {
+    optional int32 table_id = 1;
+    optional int32 status = 2;
+}
+
+message GetTablesStatusResp {
+    repeated TableInfo table_list = 1;
+}
+
 service MSTableMgr {
-  rpc OpenTable(OpenTableReq) returns (OpenTableResp);
-  rpc ChangeTable(ChangeTableReq) returns (ChangeTableResp);
-  rpc CompleteTable(CompleteTableReq) returns (CompleteTableResp);
-  rpc GetOrderDetail(GetOrderDetailReq) returns (GetOrderDetailResp);
-  rpc AddTable(AddTableReq) returns (AddTableResp);
-  rpc DelTable(DelTableReq) returns (DelTableResp);
+    rpc OpenTable(OpenTableReq) returns (OpenTableResp);
+    rpc ChangeTable(ChangeTableReq) returns (ChangeTableResp);
+    rpc CompleteTable(CompleteTableReq) returns (CompleteTableResp);
+    rpc GetOrderDetail(GetOrderDetailReq) returns (GetOrderDetailResp);
+    rpc AddTable(AddTableReq) returns (AddTableResp);
+    rpc DelTable(DelTableReq) returns (DelTableResp);
+    rpc GetTablesStatus(GetTablesStatusReq) returns (GetTablesStatusResp);
 }

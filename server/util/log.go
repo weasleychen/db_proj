@@ -8,7 +8,7 @@ import (
 )
 
 func Log(format string, args ...interface{}) {
-	newFormat := fmt.Sprintf("[%s %s] %s\n", time.Now().Format(time.DateTime), GetFunctionName(2), format)
+	newFormat := fmt.Sprintf("[%s %s] %s\n", time.Now().Format(time.DateTime), GetStackInfo(2), format)
 	file, _ := os.OpenFile(fmt.Sprintf("%s/server/log/%s.log", define.ProjectPath, time.Now().Format(time.DateOnly)), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 
 	if len(args) == 0 {

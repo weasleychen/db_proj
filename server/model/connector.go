@@ -45,6 +45,7 @@ func newRedisClient(clientId int) *redis.Client {
 
 var (
 	TokenRedisHandler = redisConnector{clientId: 1}
+	WALRedisHandler   = redisConnector{clientId: 2}
 )
 
 // 通过此接口获得实际的redis-cli, 懒汉式加载, redisConnector只是封装了单例

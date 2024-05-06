@@ -61,6 +61,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/complete-table": {
+            "get": {
+                "description": "\"结台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "CompleteTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/open-table": {
+            "get": {
+                "description": "\"开台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "OpenTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-tables-status": {
+            "get": {
+                "description": "\"获得桌台详情\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "GetTablesStatus",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/login-by-name": {
             "post": {
                 "description": "\"登录\"",

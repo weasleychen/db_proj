@@ -5,4 +5,9 @@ const (
 	ErrorDuplicateUserName
 	ErrorWrongPassword
 	ErrorTokenInvalid
+	ErrorTableIsOpened
+	ErrorTableIdInvalid
+	ErrorTableIsClosed
+	TableIsClosed
+	TableIsOpened
 )

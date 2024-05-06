@@ -24,6 +24,9 @@ func SetRouter(server *gin.Engine) {
 	server.POST("/register", handler.HandleRegister)
 	server.POST("/login-by-name", handler.HandleLoginByName)
 	server.POST("/login-by-token", handler.HandleJWTLogin)
+	server.GET("/get-tables-status", handler.HandleGetTablesStatus)
 
 	admin.GET("/add-dish", handler.HandleAddDish)
+	admin.GET("/open-table", handler.HandleOpenTable)
+	admin.GET("/complete-table", handler.HandleCompleteTable)
 }
