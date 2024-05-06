@@ -1,4 +1,4 @@
-package client
+package msdbcallclient
 
 import (
 	"context"
@@ -11,13 +11,13 @@ import (
 	"time"
 )
 
-func GetMMDemoClient(address string) (func(), *msdbcall.MSDBCallClient, *context.Context) {
+func GetMSDBCallClient(address string) (func(), *msdbcall.MSDBCallClient, *context.Context) {
 	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("grpc.Dial err")
 	}
 
-	mmdemoclient := msdbcall.NewMSDBCallClient(conn)
+	msdbcallclient := msdbcall.NewMSDBCallClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 
 	callback := func() {
@@ -25,11 +25,11 @@ func GetMMDemoClient(address string) (func(), *msdbcall.MSDBCallClient, *context
 		cancel()
 	}
 
-	return callback, &mmdemoclient, &ctx
+	return callback, &msdbcallclient, &ctx
 }
 
 func CallCreateUser(user model.User) (*msdbcall.CreateUserResp, error) {
-	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCreateUserPort)
+	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallCreateUserPort)
 	defer callback()
 
 	req := msdbcall.CreateUserReq{}
@@ -43,7 +43,7 @@ func CallCreateUser(user model.User) (*msdbcall.CreateUserResp, error) {
 }
 
 func CallAddDish(dish model.Dish) (*msdbcall.AddDishResp, error) {
-	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallAddDishPort)
+	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallAddDishPort)
 	defer callback()
 
 	req := msdbcall.AddDishReq{}
@@ -56,7 +56,7 @@ func CallAddDish(dish model.Dish) (*msdbcall.AddDishResp, error) {
 }
 
 func CheckUserPassword(name, password string) (*msdbcall.CheckUserPasswordResp, error) {
-	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserPasswordPort)
+	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserPasswordPort)
 	defer callback()
 
 	req := msdbcall.CheckUserPasswordReq{}
@@ -67,7 +67,7 @@ func CheckUserPassword(name, password string) (*msdbcall.CheckUserPasswordResp, 
 }
 
 func CheckUserNameUnique(name string) (*msdbcall.CheckUserNameUniqueResp, error) {
-	callback, client, ctx := GetMMDemoClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserNameUniquePort)
+	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserNameUniquePort)
 	defer callback()
 
 	req := msdbcall.CheckUserNameUniqueReq{}

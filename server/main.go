@@ -1,5 +1,14 @@
 package main
 
+import (
+	"db_proj/define"
+	"db_proj/handler"
+	"db_proj/router"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"log"
+)
+
 /*
 	题目七：
 	餐饮管理系统
@@ -20,15 +29,9 @@ package main
 - 异步日志
 */
 
-import (
-	"db_proj/define"
-	"db_proj/handler"
-	"db_proj/router"
-	"fmt"
-	"log"
-
-	"github.com/gin-gonic/gin"
-)
+/*
+	1. 模块内部不打日志，日志只在gin层打
+*/
 
 func StartServer(port int) *gin.Engine {
 	server := gin.Default()

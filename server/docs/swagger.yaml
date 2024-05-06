@@ -32,6 +32,51 @@ paths:
       summary: AddDish
       tags:
       - public
+  /admin/complete-table:
+    get:
+      description: '"结台"'
+      parameters:
+      - description: table_id
+        in: query
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: CompleteTable
+      tags:
+      - public
+  /admin/open-table:
+    get:
+      description: '"开台"'
+      parameters:
+      - description: table_id
+        in: query
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: OpenTable
+      tags:
+      - public
+  /get-tables-status:
+    get:
+      description: '"获得桌台详情"'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: GetTablesStatus
+      tags:
+      - public
   /login-by-name:
     post:
       description: '"登录"'
