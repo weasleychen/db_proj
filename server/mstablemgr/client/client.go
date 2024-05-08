@@ -48,3 +48,19 @@ func CallGetTablesStatus() (*mstablemgr.GetTablesStatusResp, error) {
 
 	return (*mstablemgrclient).GetTablesStatus(*ctx, &mstablemgr.GetTablesStatusReq{})
 }
+
+func CallAddTable(tableId int32) (*mstablemgr.AddTableResp, error) {
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient(define.MSTableMgrIP + ":" + define.MSTableMgrAddTable)
+	defer callback()
+
+	wal := true
+	return (*mstablemgrclient).AddTable(*ctx, &mstablemgr.AddTableReq{TableId: &tableId, Wal: &wal})
+}
+
+func CallDelTable(tableId int32) (*mstablemgr.DelTableResp, error) {
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient(define.MSTableMgrIP + ":" + define.MSTableMgrDelTable)
+	defer callback()
+
+	wal := true
+	return (*mstablemgrclient).DelTable(*ctx, &mstablemgr.DelTableReq{TableId: &tableId, Wal: &wal})
+}

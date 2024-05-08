@@ -29,4 +29,6 @@ func SetRouter(server *gin.Engine) {
 	admin.GET("/add-dish", handler.HandleAddDish)
 	admin.GET("/open-table", handler.HandleOpenTable)
 	admin.GET("/complete-table", handler.HandleCompleteTable)
+	admin.GET("/add-table", handler.HandleAddTable)
+	admin.GET("/del-table", handler.HandleDelTable)
 }

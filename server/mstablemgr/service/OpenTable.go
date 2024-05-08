@@ -24,22 +24,24 @@ func (server *OpenTableServer) OpenTable(ctx context.Context, req *mstablemgr.Op
 	var status int32
 	resp := mstablemgr.OpenTableResp{Status: &status}
 
-	if *req.TableId < 1 || int(*req.TableId) > len(Tables) {
-		status = define.ErrorTableIdInvalid
+	table, exist := Tables[int(*req.TableId)]
+	if !exist {
+		status = define.ErrorTableIdNotExist
 		return &resp, nil
 	}
 
-	if Tables[*req.TableId-1].Status == define.TableIsOpened {
+	if table.Status == define.TableIsInUse {
 		status = define.ErrorTableIsOpened
 		return &resp, nil
 	}
 
 	if *req.Wal {
 		server.LogToWAL(req)
+		Times.Add(1)
 	}
-	Times.Add(1)
 
-	Tables[*req.TableId-1].Status = define.TableIsOpened
+	table.Status = define.TableIsInUse
+	Tables[int(*req.TableId)] = table
 	status = define.OK
 
 	return &resp, nil

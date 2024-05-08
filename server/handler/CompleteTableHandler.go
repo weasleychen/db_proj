@@ -41,13 +41,13 @@ func HandleCompleteTable(ctx *gin.Context) {
 		return
 	}
 
-	if *resp.Status == define.ErrorTableIdInvalid {
+	if *resp.Status == define.ErrorTableIdNotExist {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
-			"message": "ErrorTableIdInvalid",
+			"message": "ErrorTableIdNotExist",
 		})
 
-		util.Log("Error ErrorTableIdInvalid, tableId: %v", tableId)
+		util.Log("Error ErrorTableIdNotExist, tableId: %v", tableId)
 		return
 	}
 

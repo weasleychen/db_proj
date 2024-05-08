@@ -30,7 +30,7 @@ func RegisterNewHandler(address string, handler mstablemgr.MSTableMgrServer) err
 }
 
 // RecoverFromLog WAL-从日志中恢复数据
-func RecoverFromLog(tables []mstablemgr.Table) {
+func RecoverFromLog(tables map[int]mstablemgr.Table) {
 	walJsonBytes, err := service.WALRedis.Get(define.DefaultRedisContext, "log").Bytes()
 	if err != nil && !errors.Is(err, redis.Nil) {
 		util.Log("WAL read Redis error: ", err)
@@ -62,6 +62,20 @@ func RecoverFromLog(tables []mstablemgr.Table) {
 			req.Wal = &wal
 
 			(&service.CompleteTableServer{}).CompleteTable(context.Background(), &req)
+		} else if reqLog[0] == "AddTable" {
+			req := mstablemgr.AddTableReq{}
+			json.Unmarshal([]byte(reqLog[1]), &req)
+			wal := false
+			req.Wal = &wal
+
+			(&service.AddTableServer{}).AddTable(context.Background(), &req)
+		} else if reqLog[0] == "DelTable" {
+			req := mstablemgr.DelTableReq{}
+			json.Unmarshal([]byte(reqLog[1]), &req)
+			wal := false
+			req.Wal = &wal
+
+			(&service.DelTableServer{}).DelTable(context.Background(), &req)
 		}
 	}
 }
@@ -92,6 +106,8 @@ func main() {
 	go RegisterNewHandler(":"+define.MSTableMgrOpenTable, &service.OpenTableServer{})
 	go RegisterNewHandler(":"+define.MSTableMgrCompleteTable, &service.CompleteTableServer{})
 	go RegisterNewHandler(":"+define.MSTableMgrGetTablesStatus, &service.GetTablesStatusServer{})
+	go RegisterNewHandler(":"+define.MSTableMgrAddTable, &service.AddTableServer{})
+	go RegisterNewHandler(":"+define.MSTableMgrDelTable, &service.DelTableServer{})
 
 	select {}
 }

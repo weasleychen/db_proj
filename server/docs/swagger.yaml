@@ -1,6 +1,23 @@
 info:
   contact: {}
 paths:
+  /add-table:
+    get:
+      description: '"加台"'
+      parameters:
+      - description: table_id
+        in: formData
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: AddTable
+      tags:
+      - public
   /admin/add-dish:
     get:
       description: '"添加一道菜"'
@@ -64,6 +81,23 @@ paths:
           schema:
             type: json
       summary: OpenTable
+      tags:
+      - public
+  /del-table:
+    get:
+      description: '"加台"'
+      parameters:
+      - description: table_id
+        in: formData
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: DelTable
       tags:
       - public
   /get-tables-status:

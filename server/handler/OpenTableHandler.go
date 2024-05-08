@@ -46,20 +46,20 @@ func HandleOpenTable(ctx *gin.Context) {
 	if *resp.Status == define.ErrorTableIsOpened {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
-			"message": "ErrorTableIsOpened",
+			"message": fmt.Sprintf("Error, TableIsOpened, tableId: %v", tableId),
 		})
 
-		util.Log("Error ErrorTableIsOpened, tableId: %v", tableId)
+		util.Log("Error, TableIsOpened, tableId: %v", tableId)
 		return
 	}
 
-	if *resp.Status == define.ErrorTableIdInvalid {
+	if *resp.Status == define.ErrorTableIdNotExist {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
-			"message": "ErrorTableIdInvalid",
+			"message": fmt.Sprintf("Error ErrorTableIdNotExist, tableId: %v", tableId),
 		})
 
-		util.Log("Error ErrorTableIdInvalid, tableId: %v", tableId)
+		util.Log("Error ErrorTableIdNotExist, tableId: %v", tableId)
 		return
 	}
 
