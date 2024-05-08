@@ -1,6 +1,0 @@
-OpenTable {"table_id":1,"wal":true}
-CompleteTable {"table_id":1,"wal":true}
-AddTable {"table_id":11,"wal":true}
-DelTable {"table_id":4,"wal":true}
-AddTable {"table_id":4,"wal":true}
-DelTable {"table_id":4,"wal":true}

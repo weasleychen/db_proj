@@ -4,3 +4,5 @@
 test/
 log/
 sbin/
+
+wal.log
