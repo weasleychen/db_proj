@@ -15,6 +15,32 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/add-table": {
+            "get": {
+                "description": "\"加台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "AddTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/add-dish": {
             "get": {
                 "description": "\"添加一道菜\"",
@@ -100,6 +126,32 @@ const docTemplate = `{
                         "description": "table_id",
                         "name": "table_id",
                         "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/del-table": {
+            "get": {
+                "description": "\"加台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "DelTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "formData",
                         "required": true
                     }
                 ],

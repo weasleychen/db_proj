@@ -6,8 +6,9 @@ const (
 	ErrorWrongPassword
 	ErrorTokenInvalid
 	ErrorTableIsOpened
-	ErrorTableIdInvalid
 	ErrorTableIsClosed
-	TableIsClosed
-	TableIsOpened
+	ErrorTableIdExist
+	ErrorTableIdNotExist
+	TableIsNotInUse
+	TableIsInUse
 )

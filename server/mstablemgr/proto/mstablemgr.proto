@@ -40,16 +40,23 @@ message GetOrderDetailResp {
 
 // 加台
 message AddTableReq {
+    optional int32 table_id = 1;
+    optional bool wal = 2;
 }
 
 message AddTableResp {
+    optional int32 status = 1;
+    optional bool wal = 2;
 }
 
 // 减台
 message DelTableReq {
+    optional int32 table_id = 1;
+    optional bool wal = 2;
 }
 
 message DelTableResp {
+    optional int32 status = 1;
 }
 
 message GetTablesStatusReq {

@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	Tables = make([]mstablemgr.Table, 10)
+	Tables = map[int]mstablemgr.Table{}
 	Mutex  sync.Mutex
 	Times  atomic.Int32
 
@@ -24,10 +24,10 @@ func init() {
 	Mutex.Lock()
 	defer Mutex.Unlock()
 
-	for i := 0; i < len(Tables); i++ {
+	for i := 1; i <= 10; i++ {
 		Tables[i] = mstablemgr.Table{
-			Id:     int32(i + 1),
-			Status: define.TableIsClosed,
+			Id:     int32(i),
+			Status: define.TableIsNotInUse,
 		}
 	}
 }
