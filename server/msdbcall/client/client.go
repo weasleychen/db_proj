@@ -4,6 +4,7 @@ import (
 	"context"
 	"db_proj/define"
 	"db_proj/model"
+	proto "db_proj/model/proto"
 	"db_proj/msdbcall/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -33,6 +34,8 @@ func CallCreateUser(user model.User) (*msdbcall.CreateUserResp, error) {
 	defer callback()
 
 	req := msdbcall.CreateUserReq{}
+	req.User = new(proto.User)
+
 	req.User.Uin = &user.Uin
 	req.User.Name = &user.Name
 	req.User.Password = &user.Password
@@ -47,6 +50,8 @@ func CallAddDish(dish model.Dish) (*msdbcall.AddDishResp, error) {
 	defer callback()
 
 	req := msdbcall.AddDishReq{}
+	req.Dish = new(proto.Dish)
+
 	req.Dish.Name = &dish.Name
 	req.Dish.Price = &dish.Price
 	req.Dish.Discount = &dish.Discount
