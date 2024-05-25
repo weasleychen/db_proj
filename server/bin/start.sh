@@ -52,12 +52,16 @@ function start_server() {
     # compile
     echo_begin "compile"
         go build -o sbin/db_proj main.go
+        go build -o sbin/msdbcall msdbcall/server/server.go
+        go build -o sbin/mstablemgr mstablemgr/server/server.go
     echo_done
 
     # run!
     echo_begin "run backend"
         cd $project_path/server
         swag init 1>log/log 2>log/error && nohup sbin/db_proj $@ 1>log/log 2>log/error &
+        nohup sbin/msdbcall 1>log/msdbcall_log 2>log/msdbcall_error &
+        nohup sbin/mstablemgr 1>log/mstablemgr_log 2>log/mstablemgr_error &
     echo_done
 }
 
