@@ -12,8 +12,11 @@ import (
 	"time"
 )
 
-func GetMSDBCallClient(address string) (func(), *msdbcall.MSDBCallClient, *context.Context) {
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+func GetMSDBCallClient() (func(), *msdbcall.MSDBCallClient, *context.Context) {
+	conn, err := grpc.Dial(
+		define.MSDBCallIp+":"+define.MSDBCallPort,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
 		log.Fatalf("grpc.Dial err")
 	}
@@ -30,7 +33,7 @@ func GetMSDBCallClient(address string) (func(), *msdbcall.MSDBCallClient, *conte
 }
 
 func CallCreateUser(user model.User) (*msdbcall.CreateUserResp, error) {
-	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallCreateUserPort)
+	callback, client, ctx := GetMSDBCallClient()
 	defer callback()
 
 	req := msdbcall.CreateUserReq{}
@@ -46,7 +49,7 @@ func CallCreateUser(user model.User) (*msdbcall.CreateUserResp, error) {
 }
 
 func CallAddDish(dish model.Dish) (*msdbcall.AddDishResp, error) {
-	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallAddDishPort)
+	callback, client, ctx := GetMSDBCallClient()
 	defer callback()
 
 	req := msdbcall.AddDishReq{}
@@ -61,7 +64,7 @@ func CallAddDish(dish model.Dish) (*msdbcall.AddDishResp, error) {
 }
 
 func CheckUserPassword(name, password string) (*msdbcall.CheckUserPasswordResp, error) {
-	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserPasswordPort)
+	callback, client, ctx := GetMSDBCallClient()
 	defer callback()
 
 	req := msdbcall.CheckUserPasswordReq{}
@@ -72,7 +75,7 @@ func CheckUserPassword(name, password string) (*msdbcall.CheckUserPasswordResp, 
 }
 
 func CheckUserNameUnique(name string) (*msdbcall.CheckUserNameUniqueResp, error) {
-	callback, client, ctx := GetMSDBCallClient(define.MSDBCallIp + ":" + define.MSDBCallCheckUserNameUniquePort)
+	callback, client, ctx := GetMSDBCallClient()
 	defer callback()
 
 	req := msdbcall.CheckUserNameUniqueReq{}
