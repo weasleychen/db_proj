@@ -10,8 +10,11 @@ import (
 	"time"
 )
 
-func GetMSTableMgrClient(address string) (func(), *mstablemgr.MSTableMgrClient, *context.Context) {
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+func GetMSTableMgrClient() (func(), *mstablemgr.MSTableMgrClient, *context.Context) {
+	conn, err := grpc.Dial(
+		define.MSTableMgrIP+":"+define.MSTableMgrPort,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
 		log.Fatalf("grpc.Dial err")
 	}
@@ -28,14 +31,14 @@ func GetMSTableMgrClient(address string) (func(), *mstablemgr.MSTableMgrClient, 
 }
 
 func CallOpenTable(tableId int32) (*mstablemgr.OpenTableResp, error) {
-	callback, mstablemgrclient, ctx := GetMSTableMgrClient(define.MSTableMgrIP + ":" + define.MSTableMgrOpenTable)
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
 	defer callback()
 	wal := true
 	return (*mstablemgrclient).OpenTable(*ctx, &mstablemgr.OpenTableReq{TableId: &tableId, Wal: &wal})
 }
 
 func CallCompleteTable(tableId int32) (*mstablemgr.CompleteTableResp, error) {
-	callback, mstablemgrclient, ctx := GetMSTableMgrClient(define.MSTableMgrIP + ":" + define.MSTableMgrCompleteTable)
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
 	defer callback()
 
 	wal := true
@@ -43,14 +46,14 @@ func CallCompleteTable(tableId int32) (*mstablemgr.CompleteTableResp, error) {
 }
 
 func CallGetTablesStatus() (*mstablemgr.GetTablesStatusResp, error) {
-	callback, mstablemgrclient, ctx := GetMSTableMgrClient(define.MSTableMgrIP + ":" + define.MSTableMgrGetTablesStatus)
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
 	defer callback()
 
 	return (*mstablemgrclient).GetTablesStatus(*ctx, &mstablemgr.GetTablesStatusReq{})
 }
 
 func CallAddTable(tableId int32) (*mstablemgr.AddTableResp, error) {
-	callback, mstablemgrclient, ctx := GetMSTableMgrClient(define.MSTableMgrIP + ":" + define.MSTableMgrAddTable)
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
 	defer callback()
 
 	wal := true
@@ -58,7 +61,7 @@ func CallAddTable(tableId int32) (*mstablemgr.AddTableResp, error) {
 }
 
 func CallDelTable(tableId int32) (*mstablemgr.DelTableResp, error) {
-	callback, mstablemgrclient, ctx := GetMSTableMgrClient(define.MSTableMgrIP + ":" + define.MSTableMgrDelTable)
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
 	defer callback()
 
 	wal := true

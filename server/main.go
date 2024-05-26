@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"os"
 )
 
 /*
@@ -32,6 +33,10 @@ import (
 /*
 	1. 模块内部不打日志，日志只在gin层打
 */
+
+func init() {
+	os.Mkdir(fmt.Sprintf("%s/server/log", define.ProjectPath), os.ModePerm)
+}
 
 func StartServer(port int) *gin.Engine {
 	server := gin.Default()

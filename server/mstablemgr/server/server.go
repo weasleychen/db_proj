@@ -54,28 +54,28 @@ func RecoverFromLog(tables map[int]mstablemgr.Table) {
 			wal := false
 			req.Wal = &wal
 
-			(&service.OpenTableServer{}).OpenTable(context.Background(), &req)
+			(&service.MSTableMgrServer{}).OpenTable(context.Background(), &req)
 		} else if reqLog[0] == "CompleteTable" {
 			req := mstablemgr.CompleteTableReq{}
 			json.Unmarshal([]byte(reqLog[1]), &req)
 			wal := false
 			req.Wal = &wal
 
-			(&service.CompleteTableServer{}).CompleteTable(context.Background(), &req)
+			(&service.MSTableMgrServer{}).CompleteTable(context.Background(), &req)
 		} else if reqLog[0] == "AddTable" {
 			req := mstablemgr.AddTableReq{}
 			json.Unmarshal([]byte(reqLog[1]), &req)
 			wal := false
 			req.Wal = &wal
 
-			(&service.AddTableServer{}).AddTable(context.Background(), &req)
+			(&service.MSTableMgrServer{}).AddTable(context.Background(), &req)
 		} else if reqLog[0] == "DelTable" {
 			req := mstablemgr.DelTableReq{}
 			json.Unmarshal([]byte(reqLog[1]), &req)
 			wal := false
 			req.Wal = &wal
 
-			(&service.DelTableServer{}).DelTable(context.Background(), &req)
+			(&service.MSTableMgrServer{}).DelTable(context.Background(), &req)
 		}
 	}
 }
@@ -103,11 +103,5 @@ func init() {
 }
 
 func main() {
-	go RegisterNewHandler(":"+define.MSTableMgrOpenTable, &service.OpenTableServer{})
-	go RegisterNewHandler(":"+define.MSTableMgrCompleteTable, &service.CompleteTableServer{})
-	go RegisterNewHandler(":"+define.MSTableMgrGetTablesStatus, &service.GetTablesStatusServer{})
-	go RegisterNewHandler(":"+define.MSTableMgrAddTable, &service.AddTableServer{})
-	go RegisterNewHandler(":"+define.MSTableMgrDelTable, &service.DelTableServer{})
-
-	select {}
+	RegisterNewHandler(define.MSTableMgrIP+":"+define.MSTableMgrPort, &service.MSTableMgrServer{})
 }
