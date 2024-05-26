@@ -12,6 +12,8 @@ import (
 )
 
 func SetRouter(server *gin.Engine) {
+	server.Use(middleware.Cors())
+
 	//router for swagger
 	if define.UseSwagger {
 		server.GET("swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
