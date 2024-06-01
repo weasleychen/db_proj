@@ -12,11 +12,11 @@ import (
 
 // DelTable
 // @Summary DelTable
-// @Description "加台"
+// @Description "减台"
 // @Tags public
-// @Param table_id formData string true "table_id"
+// @Param table_id query string true "table_id"
 // @Success 200 {json} {}
-// @Router /del-table [GET]
+// @Router /admin/del-table [GET]
 func HandleDelTable(ctx *gin.Context) {
 	tableIdString := ctx.Query("table_id")
 

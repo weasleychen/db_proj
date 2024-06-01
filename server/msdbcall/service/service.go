@@ -4,9 +4,13 @@ import (
 	"context"
 	"db_proj/define"
 	"db_proj/model"
+	model_pb "db_proj/model/proto"
+	msdbcallclient "db_proj/msdbcall/client"
 	"db_proj/msdbcall/proto"
+	"db_proj/util"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -38,43 +42,46 @@ func (server *MSDBCallServer) AddDish(ctx context.Context, req *msdbcall.AddDish
 	return &resp, nil
 }
 
-func (server *MSDBCallServer) CheckUserNameUnique(ctx context.Context, req *msdbcall.CheckUserNameUniqueReq) (*msdbcall.CheckUserNameUniqueResp, error) {
-	db := model.NewMySqlConnector()
-
-	var unique bool
-	resp := msdbcall.CheckUserNameUniqueResp{}
-	resp.Unique = &unique
-
-	user := model.User{}
-	if err := db.Where(&model.User{Name: *req.Name}).First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			*resp.Unique = false
-			return &resp, nil
-		}
-		return nil, err
-	}
-
-	*resp.Unique = true
-	return &resp, nil
-}
-
 func (server *MSDBCallServer) CheckUserPassword(ctx context.Context, req *msdbcall.CheckUserPasswordReq) (*msdbcall.CheckUserPasswordResp, error) {
 	db := model.NewMySqlConnector()
 
-	var success bool
-	resp := msdbcall.CheckUserPasswordResp{Success: &success}
-
+	resp := msdbcall.CheckUserPasswordResp{}
 	user := model.User{}
-	if err := db.Where("name = ? and password = ?", *req.Name, *req.Password).First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			*resp.Success = false
-			return &resp, nil
-		}
 
-		return nil, err
+	if req.GetUin() != "" {
+		if err := db.Where("uin = ?", req.GetUin()).First(&user).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				resp.Status = util.NewInt32(define.ErrorNoSuchUin)
+				return &resp, nil
+			}
+
+			// 意料之外的db错误, 直接抛给上层，以便能看到具体的错误信息
+			return nil, err
+		}
+	} else if req.GetPhoneNumber() != "" {
+		if err := db.Where("phone_number = ?", req.GetPhoneNumber()).First(&user).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				resp.Status = util.NewInt32(define.ErrorNoSuchPhoneNumber)
+				return &resp, nil
+			}
+			return nil, err
+		}
+	} else if req.GetEmail() != "" {
+		if err := db.Where("email = ?", req.GetEmail()).First(&user).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				resp.Status = util.NewInt32(define.ErrorNoSuchEmail)
+				return &resp, nil
+			}
+			return nil, err
+		}
 	}
 
-	*resp.Success = true
+	if user.Password != *req.Password {
+		resp.Status = util.NewInt32(define.ErrorWrongPassword)
+	} else {
+		resp.Status = util.NewInt32(define.OK)
+	}
+
 	return &resp, nil
 }
 
@@ -85,36 +92,128 @@ func (server *MSDBCallServer) CreateUser(ctx context.Context, req *msdbcall.Crea
 		Password:    *req.User.Password,
 		PhoneNumber: *req.User.PhoneNumber,
 		Perm:        *req.User.Perm,
+		Email:       *req.User.Email,
 	}
 
 	resp := msdbcall.CreateUserResp{}
-	code := int32(define.OK)
-	resp.Code = &code
 
 	db := model.NewMySqlConnector()
 	tx := db.Begin()
 
-	if err := tx.Where("name = ?", user.Name).First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			if err := tx.Create(&user).Error; err != nil {
-				return nil, err
-			}
+	if err := tx.Create(&user).Error; err != nil {
+		tx.Rollback()
+		resp.Code = util.NewInt32(define.ErrorCreateUser)
+		return &resp, err
+	}
 
-			tx.Commit()
+	tx.Commit()
 
-			jsonBytes, err := json.Marshal(user)
-			if err != nil {
-				return nil, err
-			}
-			jsonString := string(jsonBytes)
+	resp.Code = util.NewInt32(define.OK)
+	resp.Data = util.MarshalJsonRetPtr(user)
+	return &resp, nil
+}
 
-			resp.Data = &jsonString
-
-			return &resp, nil
-		}
+func (server *MSDBCallServer) ModifyPassword(ctx context.Context, req *msdbcall.ModifyPasswordReq) (*msdbcall.ModifyPasswordResp, error) {
+	checkUserPasswordResp, err := msdbcallclient.CallCheckUserPassword(req.GetUin(), req.GetPhoneNumber(), req.GetEmail(), req.GetOldPassword())
+	if err != nil {
 		return nil, err
 	}
 
-	*resp.Code = define.ErrorDuplicateUserName
+	resp := msdbcall.ModifyPasswordResp{}
+	if checkUserPasswordResp.GetStatus() != define.OK {
+		resp.Status = util.NewInt32(define.ErrorWrongPassword)
+		return &resp, nil
+	}
+
+	db := model.NewMySqlConnector()
+	// 根据uin > phone_number > email的优先级来修改密码
+	if req.GetUin() != "" {
+		if err := db.Model(&model.User{}).Where("uin = ?", req.GetUin()).Update("password", req.GetNewPassword()).Error; err != nil {
+			return nil, err
+		}
+	} else if req.GetPhoneNumber() != "" {
+		if err := db.Model(&model.User{}).Where("phone_number = ?", req.GetPhoneNumber()).Update("password", req.GetNewPassword()).Error; err != nil {
+			return nil, err
+		}
+	} else if req.GetEmail() != "" {
+		if err := db.Model(&model.User{}).Where("email = ?", req.GetEmail()).Update("password", req.GetNewPassword()).Error; err != nil {
+			return nil, err
+		}
+	}
+
+	resp.Status = util.NewInt32(define.OK)
+	return &resp, nil
+}
+
+func (server *MSDBCallServer) GetUserInfo(ctx context.Context, req *msdbcall.GetUserInfoReq) (*msdbcall.GetUserInfoResp, error) {
+	// 根据uin > phone_number > email的优先级来查询出一行数据
+	db := model.NewMySqlConnector()
+	user := model.User{}
+	resp := msdbcall.GetUserInfoResp{}
+
+	if req.GetUin() != "" {
+		if err := db.Where("uin = ?", req.GetUin()).First(&user).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				resp.Status = util.NewInt32(define.ErrorNoSuchUin)
+				return &resp, nil
+			}
+			return nil, err
+		}
+	} else if req.GetPhoneNumber() != "" {
+		if err := db.Where("phone_number = ?", req.GetPhoneNumber()).First(&user).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				resp.Status = util.NewInt32(define.ErrorNoSuchPhoneNumber)
+				return &resp, nil
+			}
+			return nil, err
+		}
+	} else if req.GetEmail() != "" {
+		if err := db.Where("email = ?", req.GetEmail()).First(&user).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				resp.Status = util.NewInt32(define.ErrorNoSuchEmail)
+				return &resp, nil
+			}
+			return nil, err
+		}
+	}
+
+	resp.Status = util.NewInt32(define.OK)
+	resp.Data = util.MarshalJsonRetPtr(user)
+	return &resp, nil
+}
+
+func (server *MSDBCallServer) GetDishList(ctx context.Context, req *msdbcall.GetDishListReq) (*msdbcall.GetDishListResp, error) {
+	resp := msdbcall.GetDishListResp{}
+
+	db := model.NewMySqlConnector()
+	modelDishList := make([]model.Dish, 0)
+	if err := db.Find(&modelDishList).Error; err != nil {
+		return nil, err
+	}
+
+	fmt.Println("size: ", len(modelDishList))
+
+	for _, modelDish := range modelDishList {
+		resp.DishList = append(resp.DishList, &model_pb.Dish{
+			Id:       util.NewInt32(int32(modelDish.ID)),
+			Name:     &modelDish.Name,
+			Price:    &modelDish.Price,
+			Discount: &modelDish.Discount,
+			Detail:   &modelDish.Detail,
+		})
+	}
+
+	return &resp, nil
+}
+
+func (server *MSDBCallServer) DeleteDish(ctx context.Context, req *msdbcall.DeleteDishReq) (*msdbcall.DeleteDishResp, error) {
+	db := model.NewMySqlConnector()
+	resp := msdbcall.DeleteDishResp{}
+
+	if err := db.Where("id = ?", req.GetId()).Delete(&model.Dish{}).Error; err != nil {
+		return nil, err
+	}
+
+	resp.Status = util.NewInt32(define.OK)
 	return &resp, nil
 }

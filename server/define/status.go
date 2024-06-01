@@ -2,7 +2,6 @@ package define
 
 const (
 	OK = iota
-	ErrorDuplicateUserName
 	ErrorWrongPassword
 	ErrorTokenInvalid
 	ErrorTableIsOpened
@@ -11,4 +10,8 @@ const (
 	ErrorTableIdNotExist
 	TableIsNotInUse
 	TableIsInUse
+	ErrorCreateUser // 占位 暂时不清楚db会返回什么错误
+	ErrorNoSuchUin
+	ErrorNoSuchPhoneNumber
+	ErrorNoSuchEmail
 )

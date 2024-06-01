@@ -38,10 +38,10 @@ func HandleRegister(ctx *gin.Context) {
 		return
 	}
 
-	if *resp.Code == define.ErrorDuplicateUserName {
+	if *resp.Code == define.ErrorCreateUser {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
-			"message": "duplicate user name",
+			"message": "ErrorCreateUser, 联系后端问一下具体是什么错误",
 		})
 
 		return

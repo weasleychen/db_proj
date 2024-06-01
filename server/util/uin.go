@@ -11,6 +11,7 @@ var (
 	id       int64 = 0
 )
 
+// 生成唯一uin，50位时间+14位id 并md5加密
 func GenNewUin() string {
 	if now := time.Now().Unix(); now != LastTime {
 		LastTime = now

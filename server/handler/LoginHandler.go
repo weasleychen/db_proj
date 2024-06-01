@@ -5,57 +5,54 @@ import (
 	"db_proj/model"
 	msdbcallclient "db_proj/msdbcall/client"
 	"db_proj/util"
-	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"net/http"
 )
 
-// LoginByName
-// @Summary LoginByName
+// Login
+// @Summary Login
 // @Description "登录"
 // @Tags public
-// @Param name formData string true "用户名"
+// @Param phone_number query string true "手机号"
 // @Param password formData string true "MD5加密密码"
 // @Success 200 {json} {}
-// @Router /login-by-name [POST]
-func HandleLoginByName(ctx *gin.Context) {
-	user := model.User{
-		Model:    gorm.Model{},
-		Name:     ctx.PostForm("name"),
-		Password: ctx.PostForm("password"),
-		Perm:     0,
-	}
-
-	resp, err := msdbcallclient.CheckUserPassword(user.Name, user.Password)
+// @Router /login [POST]
+func HandleLogin(ctx *gin.Context) {
+	// 支持三种登录方式，不过swagger只开放了phone_number
+	resp, err := msdbcallclient.CallCheckUserPassword(ctx.Query("uin"), ctx.Query("phone_number"), ctx.Query("email"), ctx.PostForm("password"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
 		})
 
-		util.Log("CheckUserPassword Error, err: %v", err)
+		util.Log("CallCheckUserPassword Error, err: %v", err)
 		return
 	}
 
-	if *resp.Success {
-		jsonBytes, err := json.Marshal(user)
+	if resp.GetStatus() == define.OK {
+		getUserInfoResp, err := msdbcallclient.CallGetUserInfo(ctx.Query("uin"), ctx.Query("phone_number"), ctx.Query("email"))
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{})
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"success": "false",
+			})
+
+			util.Log("CallGetUserInfo Error, err: %v", err)
 			return
 		}
 
-		jsonString := string(jsonBytes)
+		jsonString := getUserInfoResp.GetData()
 		tokenString := util.GenJWT(jsonString)
 
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "true",
 			"token":   tokenString,
-			"user":    user,
+			"user":    util.UnmarshalJsonRetPrt[model.User](jsonString),
 		})
 	} else {
+		util.Log("check password error, status: %v", resp.GetStatus())
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
-			"ret":     define.ErrorWrongPassword,
+			"status":  define.ErrorWrongPassword,
 		})
 	}
 }
