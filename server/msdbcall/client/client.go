@@ -44,6 +44,7 @@ func CallCreateUser(user model.User) (*msdbcall.CreateUserResp, error) {
 	req.User.Password = &user.Password
 	req.User.PhoneNumber = &user.PhoneNumber
 	req.User.Perm = &user.Perm
+	req.User.Email = &user.Email
 
 	return (*client).CreateUser(*ctx, &req)
 }
@@ -63,23 +64,58 @@ func CallAddDish(dish model.Dish) (*msdbcall.AddDishResp, error) {
 	return (*client).AddDish(*ctx, &req)
 }
 
-func CheckUserPassword(name, password string) (*msdbcall.CheckUserPasswordResp, error) {
+func CallCheckUserPassword(uin, phoneNumber, email, password string) (*msdbcall.CheckUserPasswordResp, error) {
 	callback, client, ctx := GetMSDBCallClient()
 	defer callback()
 
 	req := msdbcall.CheckUserPasswordReq{}
-	req.Name = &name
+	req.Uin = &uin
+	req.PhoneNumber = &phoneNumber
+	req.Email = &email
 	req.Password = &password
 
 	return (*client).CheckUserPassword(*ctx, &req)
 }
 
-func CheckUserNameUnique(name string) (*msdbcall.CheckUserNameUniqueResp, error) {
+func CallModifyPassword(uin, phoneNumber, email, oldPassword, newPassword string) (*msdbcall.ModifyPasswordResp, error) {
 	callback, client, ctx := GetMSDBCallClient()
 	defer callback()
 
-	req := msdbcall.CheckUserNameUniqueReq{}
-	req.Name = &name
+	req := msdbcall.ModifyPasswordReq{}
+	req.Uin = &uin
+	req.PhoneNumber = &phoneNumber
+	req.Email = &email
+	req.OldPassword = &oldPassword
+	req.NewPassword = &newPassword
 
-	return (*client).CheckUserNameUnique(*ctx, &req)
+	return (*client).ModifyPassword(*ctx, &req)
+}
+
+func CallGetUserInfo(uin, phoneNumber, email string) (*msdbcall.GetUserInfoResp, error) {
+	callback, client, ctx := GetMSDBCallClient()
+	defer callback()
+
+	req := msdbcall.GetUserInfoReq{}
+	req.Uin = &uin
+	req.PhoneNumber = &phoneNumber
+	req.Email = &email
+
+	return (*client).GetUserInfo(*ctx, &req)
+}
+
+func CallGetDishList() (*msdbcall.GetDishListResp, error) {
+	callback, client, ctx := GetMSDBCallClient()
+	defer callback()
+
+	return (*client).GetDishList(*ctx, &msdbcall.GetDishListReq{})
+}
+
+func CallDeleteDish(dishId int32) (*msdbcall.DeleteDishResp, error) {
+	callback, client, ctx := GetMSDBCallClient()
+	defer callback()
+
+	req := msdbcall.DeleteDishReq{}
+	req.Id = &dishId
+
+	return (*client).DeleteDish(*ctx, &req)
 }

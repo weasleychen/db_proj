@@ -24,13 +24,16 @@ func SetRouter(server *gin.Engine) {
 	server.GET("/ping", handler.HandlePing)
 
 	server.POST("/register", handler.HandleRegister)
-	server.POST("/login-by-name", handler.HandleLoginByName)
+	server.POST("/login", handler.HandleLogin)
 	server.POST("/login-by-token", handler.HandleJWTLogin)
 	server.GET("/get-tables-status", handler.HandleGetTablesStatus)
+	server.POST("/modify-password", handler.HandleModifyPassword)
+	server.GET("/get-dish-list", handler.HandleGetDishList)
 
 	admin.GET("/add-dish", handler.HandleAddDish)
 	admin.GET("/open-table", handler.HandleOpenTable)
 	admin.GET("/complete-table", handler.HandleCompleteTable)
 	admin.GET("/add-table", handler.HandleAddTable)
 	admin.GET("/del-table", handler.HandleDelTable)
+	admin.GET("/delete-dish", handler.HandleDeleteDish)
 }

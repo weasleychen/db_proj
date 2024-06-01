@@ -1,7 +1,8 @@
 syntax = "proto2";
 
-// 更新本proto时改为 "model/proto;model_pb"
-option go_package = "db_proj/model/proto;model_pb";
+// db_proj/server下 protoc --go_out=. --go-grpc_out=. model/model.proto
+//option go_package = "model/proto;model_pb"; // 更新proto时用
+option go_package = "db_proj/model/proto;model_pb"; // 更新完改为这个, 用于本文件被import
 
 package model;
 
@@ -11,11 +12,13 @@ message User {
     optional string password = 3;
     optional string phone_number = 4;
     optional int32 perm = 5;
+    optional string email = 6;
 }
 
 message Dish {
-    optional string name = 1;
-    optional double price = 2;
-    optional double discount = 3;
-    optional string detail = 4;
+    optional int32 id = 1;
+    optional string name = 2;
+    optional double price = 3;
+    optional double discount = 4;
+    optional string detail = 5;
 }

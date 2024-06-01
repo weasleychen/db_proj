@@ -1,23 +1,6 @@
 info:
   contact: {}
 paths:
-  /add-table:
-    get:
-      description: '"加台"'
-      parameters:
-      - description: table_id
-        in: formData
-        name: table_id
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: json
-      summary: AddTable
-      tags:
-      - public
   /admin/add-dish:
     get:
       description: '"添加一道菜"'
@@ -49,6 +32,23 @@ paths:
       summary: AddDish
       tags:
       - public
+  /admin/add-table:
+    get:
+      description: '"加台"'
+      parameters:
+      - description: table_id
+        in: formData
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: AddTable
+      tags:
+      - public
   /admin/complete-table:
     get:
       description: '"结台"'
@@ -64,6 +64,40 @@ paths:
           schema:
             type: json
       summary: CompleteTable
+      tags:
+      - public
+  /admin/del-table:
+    get:
+      description: '"减台"'
+      parameters:
+      - description: table_id
+        in: query
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: DelTable
+      tags:
+      - public
+  /admin/delete-dish:
+    get:
+      description: '"删除一道菜"'
+      parameters:
+      - description: dish_id
+        in: query
+        name: dish_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: DeleteDish
       tags:
       - public
   /admin/open-table:
@@ -83,13 +117,25 @@ paths:
       summary: OpenTable
       tags:
       - public
-  /del-table:
+  /check-user-password:
     get:
-      description: '"加台"'
+      description: '"检查md5加密用户密码是否正确"'
       parameters:
-      - description: table_id
+      - description: uin
+        in: query
+        name: uin
+        type: string
+      - description: phone_number
+        in: query
+        name: phone_number
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: password
         in: formData
-        name: table_id
+        name: password
         required: true
         type: string
       responses:
@@ -97,7 +143,18 @@ paths:
           description: OK
           schema:
             type: json
-      summary: DelTable
+      summary: CallCheckUserPassword
+      tags:
+      - public
+  /get-dish-list:
+    get:
+      description: '"获取菜品列表"'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: GetDishList
       tags:
       - public
   /get-tables-status:
@@ -111,13 +168,13 @@ paths:
       summary: GetTablesStatus
       tags:
       - public
-  /login-by-name:
+  /login:
     post:
       description: '"登录"'
       parameters:
-      - description: 用户名
-        in: formData
-        name: name
+      - description: 手机号
+        in: query
+        name: phone_number
         required: true
         type: string
       - description: MD5加密密码
@@ -130,7 +187,7 @@ paths:
           description: OK
           schema:
             type: json
-      summary: LoginByName
+      summary: Login
       tags:
       - public
   /login-by-token:
@@ -148,6 +205,40 @@ paths:
           schema:
             type: json
       summary: LoginByJWT
+      tags:
+      - public
+  /modify-password:
+    post:
+      description: '"修改密码"'
+      parameters:
+      - description: uin
+        in: query
+        name: uin
+        type: string
+      - description: phone_numer
+        in: query
+        name: phone_number
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: old_password
+        in: formData
+        name: old_password
+        required: true
+        type: string
+      - description: new_password
+        in: formData
+        name: new_password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: ModifyPassword
       tags:
       - public
   /ping:

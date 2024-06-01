@@ -25,7 +25,12 @@ type MSDBCallClient interface {
 	CreateUser(ctx context.Context, in *CreateUserReq, opts ...grpc.CallOption) (*CreateUserResp, error)
 	AddDish(ctx context.Context, in *AddDishReq, opts ...grpc.CallOption) (*AddDishResp, error)
 	CheckUserPassword(ctx context.Context, in *CheckUserPasswordReq, opts ...grpc.CallOption) (*CheckUserPasswordResp, error)
-	CheckUserNameUnique(ctx context.Context, in *CheckUserNameUniqueReq, opts ...grpc.CallOption) (*CheckUserNameUniqueResp, error)
+	ModifyPassword(ctx context.Context, in *ModifyPasswordReq, opts ...grpc.CallOption) (*ModifyPasswordResp, error)
+	CheckUserPhoneUnique(ctx context.Context, in *CheckUserPhoneUniqueReq, opts ...grpc.CallOption) (*CheckUserPhoneUniqueResp, error)
+	CheckUserEmailUnique(ctx context.Context, in *CheckUserEmailUniqueReq, opts ...grpc.CallOption) (*CheckUserEmailUniqueResp, error)
+	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+	GetDishList(ctx context.Context, in *GetDishListReq, opts ...grpc.CallOption) (*GetDishListResp, error)
+	DeleteDish(ctx context.Context, in *DeleteDishReq, opts ...grpc.CallOption) (*DeleteDishResp, error)
 }
 
 type mSDBCallClient struct {
@@ -63,9 +68,54 @@ func (c *mSDBCallClient) CheckUserPassword(ctx context.Context, in *CheckUserPas
 	return out, nil
 }
 
-func (c *mSDBCallClient) CheckUserNameUnique(ctx context.Context, in *CheckUserNameUniqueReq, opts ...grpc.CallOption) (*CheckUserNameUniqueResp, error) {
-	out := new(CheckUserNameUniqueResp)
-	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/CheckUserNameUnique", in, out, opts...)
+func (c *mSDBCallClient) ModifyPassword(ctx context.Context, in *ModifyPasswordReq, opts ...grpc.CallOption) (*ModifyPasswordResp, error) {
+	out := new(ModifyPasswordResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/ModifyPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mSDBCallClient) CheckUserPhoneUnique(ctx context.Context, in *CheckUserPhoneUniqueReq, opts ...grpc.CallOption) (*CheckUserPhoneUniqueResp, error) {
+	out := new(CheckUserPhoneUniqueResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/CheckUserPhoneUnique", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mSDBCallClient) CheckUserEmailUnique(ctx context.Context, in *CheckUserEmailUniqueReq, opts ...grpc.CallOption) (*CheckUserEmailUniqueResp, error) {
+	out := new(CheckUserEmailUniqueResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/CheckUserEmailUnique", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mSDBCallClient) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+	out := new(GetUserInfoResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/GetUserInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mSDBCallClient) GetDishList(ctx context.Context, in *GetDishListReq, opts ...grpc.CallOption) (*GetDishListResp, error) {
+	out := new(GetDishListResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/GetDishList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mSDBCallClient) DeleteDish(ctx context.Context, in *DeleteDishReq, opts ...grpc.CallOption) (*DeleteDishResp, error) {
+	out := new(DeleteDishResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/DeleteDish", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +129,12 @@ type MSDBCallServer interface {
 	CreateUser(context.Context, *CreateUserReq) (*CreateUserResp, error)
 	AddDish(context.Context, *AddDishReq) (*AddDishResp, error)
 	CheckUserPassword(context.Context, *CheckUserPasswordReq) (*CheckUserPasswordResp, error)
-	CheckUserNameUnique(context.Context, *CheckUserNameUniqueReq) (*CheckUserNameUniqueResp, error)
+	ModifyPassword(context.Context, *ModifyPasswordReq) (*ModifyPasswordResp, error)
+	CheckUserPhoneUnique(context.Context, *CheckUserPhoneUniqueReq) (*CheckUserPhoneUniqueResp, error)
+	CheckUserEmailUnique(context.Context, *CheckUserEmailUniqueReq) (*CheckUserEmailUniqueResp, error)
+	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
+	GetDishList(context.Context, *GetDishListReq) (*GetDishListResp, error)
+	DeleteDish(context.Context, *DeleteDishReq) (*DeleteDishResp, error)
 	mustEmbedUnimplementedMSDBCallServer()
 }
 
@@ -96,8 +151,23 @@ func (UnimplementedMSDBCallServer) AddDish(context.Context, *AddDishReq) (*AddDi
 func (UnimplementedMSDBCallServer) CheckUserPassword(context.Context, *CheckUserPasswordReq) (*CheckUserPasswordResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckUserPassword not implemented")
 }
-func (UnimplementedMSDBCallServer) CheckUserNameUnique(context.Context, *CheckUserNameUniqueReq) (*CheckUserNameUniqueResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckUserNameUnique not implemented")
+func (UnimplementedMSDBCallServer) ModifyPassword(context.Context, *ModifyPasswordReq) (*ModifyPasswordResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModifyPassword not implemented")
+}
+func (UnimplementedMSDBCallServer) CheckUserPhoneUnique(context.Context, *CheckUserPhoneUniqueReq) (*CheckUserPhoneUniqueResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUserPhoneUnique not implemented")
+}
+func (UnimplementedMSDBCallServer) CheckUserEmailUnique(context.Context, *CheckUserEmailUniqueReq) (*CheckUserEmailUniqueResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUserEmailUnique not implemented")
+}
+func (UnimplementedMSDBCallServer) GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
+}
+func (UnimplementedMSDBCallServer) GetDishList(context.Context, *GetDishListReq) (*GetDishListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDishList not implemented")
+}
+func (UnimplementedMSDBCallServer) DeleteDish(context.Context, *DeleteDishReq) (*DeleteDishResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDish not implemented")
 }
 func (UnimplementedMSDBCallServer) mustEmbedUnimplementedMSDBCallServer() {}
 
@@ -166,20 +236,110 @@ func _MSDBCall_CheckUserPassword_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MSDBCall_CheckUserNameUnique_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckUserNameUniqueReq)
+func _MSDBCall_ModifyPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModifyPasswordReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MSDBCallServer).CheckUserNameUnique(ctx, in)
+		return srv.(MSDBCallServer).ModifyPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/msdbcall.MSDBCall/CheckUserNameUnique",
+		FullMethod: "/msdbcall.MSDBCall/ModifyPassword",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MSDBCallServer).CheckUserNameUnique(ctx, req.(*CheckUserNameUniqueReq))
+		return srv.(MSDBCallServer).ModifyPassword(ctx, req.(*ModifyPasswordReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MSDBCall_CheckUserPhoneUnique_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckUserPhoneUniqueReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).CheckUserPhoneUnique(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/CheckUserPhoneUnique",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).CheckUserPhoneUnique(ctx, req.(*CheckUserPhoneUniqueReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MSDBCall_CheckUserEmailUnique_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckUserEmailUniqueReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).CheckUserEmailUnique(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/CheckUserEmailUnique",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).CheckUserEmailUnique(ctx, req.(*CheckUserEmailUniqueReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MSDBCall_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).GetUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/GetUserInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).GetUserInfo(ctx, req.(*GetUserInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MSDBCall_GetDishList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDishListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).GetDishList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/GetDishList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).GetDishList(ctx, req.(*GetDishListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MSDBCall_DeleteDish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDishReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).DeleteDish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/DeleteDish",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).DeleteDish(ctx, req.(*DeleteDishReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -204,8 +364,28 @@ var MSDBCall_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MSDBCall_CheckUserPassword_Handler,
 		},
 		{
-			MethodName: "CheckUserNameUnique",
-			Handler:    _MSDBCall_CheckUserNameUnique_Handler,
+			MethodName: "ModifyPassword",
+			Handler:    _MSDBCall_ModifyPassword_Handler,
+		},
+		{
+			MethodName: "CheckUserPhoneUnique",
+			Handler:    _MSDBCall_CheckUserPhoneUnique_Handler,
+		},
+		{
+			MethodName: "CheckUserEmailUnique",
+			Handler:    _MSDBCall_CheckUserEmailUnique_Handler,
+		},
+		{
+			MethodName: "GetUserInfo",
+			Handler:    _MSDBCall_GetUserInfo_Handler,
+		},
+		{
+			MethodName: "GetDishList",
+			Handler:    _MSDBCall_GetDishList_Handler,
+		},
+		{
+			MethodName: "DeleteDish",
+			Handler:    _MSDBCall_DeleteDish_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

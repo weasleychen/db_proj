@@ -24,25 +24,82 @@ message AddDishResp {
 }
 
 message CheckUserPasswordReq {
-    optional string name = 1;
-    optional string password = 2;
+    // 三选一，都有的话优先级为 uin > phone > email
+    optional string uin = 1;
+    optional string phone_number = 2;
+    optional string email = 3;
+    optional string password = 4;
 }
 
 message CheckUserPasswordResp {
-    optional bool success = 1;
+    optional int32 status = 1;
 }
 
-message CheckUserNameUniqueReq {
-    optional string name = 1;
+message GetUserInfoReq {
+    optional string uin = 1;
+    optional string phone_number = 2;
+    optional string email = 3;
 }
 
-message CheckUserNameUniqueResp {
+message GetUserInfoResp {
+    optional int32 status = 1;
+    optional string data = 2;
+}
+
+message ModifyPasswordReq {
+    // 三选一，都有的话优先级为 uin > phone > email
+    optional string uin = 1;
+    optional string phone_number = 2;
+    optional string email = 3;
+
+    optional string old_password = 4;
+    optional string new_password = 5;
+}
+
+message ModifyPasswordResp {
+    optional int32 status = 1;
+}
+
+message CheckUserPhoneUniqueReq {
+    optional string phone_number = 1;
+}
+
+message CheckUserPhoneUniqueResp {
     optional bool unique = 1;
+}
+
+message CheckUserEmailUniqueReq {
+    optional string email = 1;
+}
+
+message CheckUserEmailUniqueResp {
+    optional bool unique = 1;
+}
+
+message GetDishListReq {
+
+}
+
+message GetDishListResp {
+    repeated model.Dish dish_list = 1;
+}
+
+message DeleteDishReq {
+    optional int32 id = 1;
+}
+
+message DeleteDishResp {
+    optional int32 status = 1;
 }
 
 service MSDBCall {
     rpc CreateUser(CreateUserReq) returns(CreateUserResp);
     rpc AddDish(AddDishReq) returns(AddDishResp);
     rpc CheckUserPassword(CheckUserPasswordReq) returns(CheckUserPasswordResp);
-    rpc CheckUserNameUnique(CheckUserNameUniqueReq) returns(CheckUserNameUniqueResp);
+    rpc ModifyPassword(ModifyPasswordReq) returns(ModifyPasswordResp);
+    rpc CheckUserPhoneUnique(CheckUserPhoneUniqueReq) returns(CheckUserPhoneUniqueResp);
+    rpc CheckUserEmailUnique(CheckUserEmailUniqueReq) returns(CheckUserEmailUniqueResp);
+    rpc GetUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
+    rpc GetDishList(GetDishListReq) returns(GetDishListResp);
+    rpc DeleteDish(DeleteDishReq) returns(DeleteDishResp);
 }

@@ -16,7 +16,7 @@ import (
 // @Tags public
 // @Param table_id formData string true "table_id"
 // @Success 200 {json} {}
-// @Router /add-table [GET]
+// @Router /admin/add-table [GET]
 func HandleAddTable(ctx *gin.Context) {
 	tableIdString := ctx.Query("table_id")
 

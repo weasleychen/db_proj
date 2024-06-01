@@ -15,32 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/add-table": {
-            "get": {
-                "description": "\"加台\"",
-                "tags": [
-                    "public"
-                ],
-                "summary": "AddTable",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "table_id",
-                        "name": "table_id",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "json"
-                        }
-                    }
-                }
-            }
-        },
         "/admin/add-dish": {
             "get": {
                 "description": "\"添加一道菜\"",
@@ -87,6 +61,32 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/add-table": {
+            "get": {
+                "description": "\"加台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "AddTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/complete-table": {
             "get": {
                 "description": "\"结台\"",
@@ -99,6 +99,58 @@ const docTemplate = `{
                         "type": "string",
                         "description": "table_id",
                         "name": "table_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/del-table": {
+            "get": {
+                "description": "\"减台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "DelTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/delete-dish": {
+            "get": {
+                "description": "\"删除一道菜\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "DeleteDish",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dish_id",
+                        "name": "dish_id",
                         "in": "query",
                         "required": true
                     }
@@ -139,22 +191,57 @@ const docTemplate = `{
                 }
             }
         },
-        "/del-table": {
+        "/check-user-password": {
             "get": {
-                "description": "\"加台\"",
+                "description": "\"检查md5加密用户密码是否正确\"",
                 "tags": [
                     "public"
                 ],
-                "summary": "DelTable",
+                "summary": "CallCheckUserPassword",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "table_id",
-                        "name": "table_id",
+                        "description": "uin",
+                        "name": "uin",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "phone_number",
+                        "name": "phone_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "password",
                         "in": "formData",
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-dish-list": {
+            "get": {
+                "description": "\"获取菜品列表\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "GetDishList",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -182,19 +269,19 @@ const docTemplate = `{
                 }
             }
         },
-        "/login-by-name": {
+        "/login": {
             "post": {
                 "description": "\"登录\"",
                 "tags": [
                     "public"
                 ],
-                "summary": "LoginByName",
+                "summary": "Login",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户名",
-                        "name": "name",
-                        "in": "formData",
+                        "description": "手机号",
+                        "name": "phone_number",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -227,6 +314,57 @@ const docTemplate = `{
                         "type": "string",
                         "description": "token",
                         "name": "token",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/modify-password": {
+            "post": {
+                "description": "\"修改密码\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "ModifyPassword",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "uin",
+                        "name": "uin",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "phone_numer",
+                        "name": "phone_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "old_password",
+                        "name": "old_password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "new_password",
+                        "name": "new_password",
                         "in": "formData",
                         "required": true
                     }
