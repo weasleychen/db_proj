@@ -29,6 +29,8 @@ type MSTableMgrClient interface {
 	AddTable(ctx context.Context, in *AddTableReq, opts ...grpc.CallOption) (*AddTableResp, error)
 	DelTable(ctx context.Context, in *DelTableReq, opts ...grpc.CallOption) (*DelTableResp, error)
 	GetTablesStatus(ctx context.Context, in *GetTablesStatusReq, opts ...grpc.CallOption) (*GetTablesStatusResp, error)
+	OrderDish(ctx context.Context, in *OrderDishReq, opts ...grpc.CallOption) (*OrderDishResp, error)
+	GetTableInfo(ctx context.Context, in *GetTableInfoReq, opts ...grpc.CallOption) (*GetTableInfoResp, error)
 }
 
 type mSTableMgrClient struct {
@@ -102,6 +104,24 @@ func (c *mSTableMgrClient) GetTablesStatus(ctx context.Context, in *GetTablesSta
 	return out, nil
 }
 
+func (c *mSTableMgrClient) OrderDish(ctx context.Context, in *OrderDishReq, opts ...grpc.CallOption) (*OrderDishResp, error) {
+	out := new(OrderDishResp)
+	err := c.cc.Invoke(ctx, "/mstablemgr.MSTableMgr/OrderDish", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mSTableMgrClient) GetTableInfo(ctx context.Context, in *GetTableInfoReq, opts ...grpc.CallOption) (*GetTableInfoResp, error) {
+	out := new(GetTableInfoResp)
+	err := c.cc.Invoke(ctx, "/mstablemgr.MSTableMgr/GetTableInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MSTableMgrServer is the server API for MSTableMgr service.
 // All implementations must embed UnimplementedMSTableMgrServer
 // for forward compatibility
@@ -113,6 +133,8 @@ type MSTableMgrServer interface {
 	AddTable(context.Context, *AddTableReq) (*AddTableResp, error)
 	DelTable(context.Context, *DelTableReq) (*DelTableResp, error)
 	GetTablesStatus(context.Context, *GetTablesStatusReq) (*GetTablesStatusResp, error)
+	OrderDish(context.Context, *OrderDishReq) (*OrderDishResp, error)
+	GetTableInfo(context.Context, *GetTableInfoReq) (*GetTableInfoResp, error)
 	mustEmbedUnimplementedMSTableMgrServer()
 }
 
@@ -140,6 +162,12 @@ func (UnimplementedMSTableMgrServer) DelTable(context.Context, *DelTableReq) (*D
 }
 func (UnimplementedMSTableMgrServer) GetTablesStatus(context.Context, *GetTablesStatusReq) (*GetTablesStatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTablesStatus not implemented")
+}
+func (UnimplementedMSTableMgrServer) OrderDish(context.Context, *OrderDishReq) (*OrderDishResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OrderDish not implemented")
+}
+func (UnimplementedMSTableMgrServer) GetTableInfo(context.Context, *GetTableInfoReq) (*GetTableInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTableInfo not implemented")
 }
 func (UnimplementedMSTableMgrServer) mustEmbedUnimplementedMSTableMgrServer() {}
 
@@ -280,6 +308,42 @@ func _MSTableMgr_GetTablesStatus_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MSTableMgr_OrderDish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OrderDishReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSTableMgrServer).OrderDish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mstablemgr.MSTableMgr/OrderDish",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSTableMgrServer).OrderDish(ctx, req.(*OrderDishReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MSTableMgr_GetTableInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTableInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSTableMgrServer).GetTableInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mstablemgr.MSTableMgr/GetTableInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSTableMgrServer).GetTableInfo(ctx, req.(*GetTableInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MSTableMgr_ServiceDesc is the grpc.ServiceDesc for MSTableMgr service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +378,14 @@ var MSTableMgr_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTablesStatus",
 			Handler:    _MSTableMgr_GetTablesStatus_Handler,
+		},
+		{
+			MethodName: "OrderDish",
+			Handler:    _MSTableMgr_OrderDish_Handler,
+		},
+		{
+			MethodName: "GetTableInfo",
+			Handler:    _MSTableMgr_GetTableInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
