@@ -3,6 +3,12 @@ syntax = "proto2";
 package mstablemgr;
 
 option go_package = ".;mstablemgr";
+//import "model/model.proto";
+
+/*
+    需要wal的操作走client
+    wal恢复时是直接调用service的函数
+*/
 
 // 开台
 message OpenTableReq {
@@ -71,6 +77,25 @@ message GetTablesStatusResp {
     repeated TableInfo table_list = 1;
 }
 
+message OrderDishReq {
+    optional int32 table_id = 1;
+    repeated int32 dishIdList = 2;
+    optional bool wal = 3;
+}
+
+message OrderDishResp {
+    optional int32 status = 2;
+}
+
+message GetTableInfoReq {
+    optional int32 table_id = 1;
+}
+
+message GetTableInfoResp {
+    optional int32 status = 1;
+    optional string json_string = 2;
+}
+
 service MSTableMgr {
     rpc OpenTable(OpenTableReq) returns (OpenTableResp);
     rpc ChangeTable(ChangeTableReq) returns (ChangeTableResp);
@@ -78,5 +103,7 @@ service MSTableMgr {
     rpc GetOrderDetail(GetOrderDetailReq) returns (GetOrderDetailResp);
     rpc AddTable(AddTableReq) returns (AddTableResp);
     rpc DelTable(DelTableReq) returns (DelTableResp);
-    rpc GetTablesStatus(GetTablesStatusReq) returns (GetTablesStatusResp);
+    rpc GetTablesStatus(GetTablesStatusReq) returns (GetTablesStatusResp); // 查询桌台是否in use
+    rpc OrderDish(OrderDishReq) returns (OrderDishResp);
+    rpc GetTableInfo(GetTableInfoReq) returns (GetTableInfoResp);
 }
