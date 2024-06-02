@@ -10,7 +10,7 @@ import (
 
 // GetTablesStatus
 // @Summary GetTablesStatus
-// @Description "获得桌台详情"
+// @Description "获得全部桌台状态"
 // @Tags public
 // @Success 200 {json} {}
 // @Router /get-tables-status [GET]

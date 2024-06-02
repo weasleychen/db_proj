@@ -51,7 +51,7 @@ func (server *MSDBCallServer) CheckUserPassword(ctx context.Context, req *msdbca
 	if req.GetUin() != "" {
 		if err := db.Where("uin = ?", req.GetUin()).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				resp.Status = util.NewInt32(define.ErrorNoSuchUin)
+				resp.Status = util.NewType[int32](define.ErrorNoSuchUin)
 				return &resp, nil
 			}
 
@@ -61,7 +61,7 @@ func (server *MSDBCallServer) CheckUserPassword(ctx context.Context, req *msdbca
 	} else if req.GetPhoneNumber() != "" {
 		if err := db.Where("phone_number = ?", req.GetPhoneNumber()).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				resp.Status = util.NewInt32(define.ErrorNoSuchPhoneNumber)
+				resp.Status = util.NewType[int32](define.ErrorNoSuchPhoneNumber)
 				return &resp, nil
 			}
 			return nil, err
@@ -69,7 +69,7 @@ func (server *MSDBCallServer) CheckUserPassword(ctx context.Context, req *msdbca
 	} else if req.GetEmail() != "" {
 		if err := db.Where("email = ?", req.GetEmail()).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				resp.Status = util.NewInt32(define.ErrorNoSuchEmail)
+				resp.Status = util.NewType[int32](define.ErrorNoSuchEmail)
 				return &resp, nil
 			}
 			return nil, err
@@ -77,9 +77,9 @@ func (server *MSDBCallServer) CheckUserPassword(ctx context.Context, req *msdbca
 	}
 
 	if user.Password != *req.Password {
-		resp.Status = util.NewInt32(define.ErrorWrongPassword)
+		resp.Status = util.NewType[int32](define.ErrorWrongPassword)
 	} else {
-		resp.Status = util.NewInt32(define.OK)
+		resp.Status = util.NewType[int32](define.OK)
 	}
 
 	return &resp, nil
@@ -102,13 +102,13 @@ func (server *MSDBCallServer) CreateUser(ctx context.Context, req *msdbcall.Crea
 
 	if err := tx.Create(&user).Error; err != nil {
 		tx.Rollback()
-		resp.Code = util.NewInt32(define.ErrorCreateUser)
+		resp.Code = util.NewType[int32](define.ErrorCreateUser)
 		return &resp, err
 	}
 
 	tx.Commit()
 
-	resp.Code = util.NewInt32(define.OK)
+	resp.Code = util.NewType[int32](define.OK)
 	resp.Data = util.MarshalJsonRetPtr(user)
 	return &resp, nil
 }
@@ -121,7 +121,7 @@ func (server *MSDBCallServer) ModifyPassword(ctx context.Context, req *msdbcall.
 
 	resp := msdbcall.ModifyPasswordResp{}
 	if checkUserPasswordResp.GetStatus() != define.OK {
-		resp.Status = util.NewInt32(define.ErrorWrongPassword)
+		resp.Status = util.NewType[int32](define.ErrorWrongPassword)
 		return &resp, nil
 	}
 
@@ -141,7 +141,7 @@ func (server *MSDBCallServer) ModifyPassword(ctx context.Context, req *msdbcall.
 		}
 	}
 
-	resp.Status = util.NewInt32(define.OK)
+	resp.Status = util.NewType[int32](define.OK)
 	return &resp, nil
 }
 
@@ -154,7 +154,7 @@ func (server *MSDBCallServer) GetUserInfo(ctx context.Context, req *msdbcall.Get
 	if req.GetUin() != "" {
 		if err := db.Where("uin = ?", req.GetUin()).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				resp.Status = util.NewInt32(define.ErrorNoSuchUin)
+				resp.Status = util.NewType[int32](define.ErrorNoSuchUin)
 				return &resp, nil
 			}
 			return nil, err
@@ -162,7 +162,7 @@ func (server *MSDBCallServer) GetUserInfo(ctx context.Context, req *msdbcall.Get
 	} else if req.GetPhoneNumber() != "" {
 		if err := db.Where("phone_number = ?", req.GetPhoneNumber()).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				resp.Status = util.NewInt32(define.ErrorNoSuchPhoneNumber)
+				resp.Status = util.NewType[int32](define.ErrorNoSuchPhoneNumber)
 				return &resp, nil
 			}
 			return nil, err
@@ -170,14 +170,14 @@ func (server *MSDBCallServer) GetUserInfo(ctx context.Context, req *msdbcall.Get
 	} else if req.GetEmail() != "" {
 		if err := db.Where("email = ?", req.GetEmail()).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				resp.Status = util.NewInt32(define.ErrorNoSuchEmail)
+				resp.Status = util.NewType[int32](define.ErrorNoSuchEmail)
 				return &resp, nil
 			}
 			return nil, err
 		}
 	}
 
-	resp.Status = util.NewInt32(define.OK)
+	resp.Status = util.NewType[int32](define.OK)
 	resp.Data = util.MarshalJsonRetPtr(user)
 	return &resp, nil
 }
@@ -195,7 +195,7 @@ func (server *MSDBCallServer) GetDishList(ctx context.Context, req *msdbcall.Get
 
 	for _, modelDish := range modelDishList {
 		resp.DishList = append(resp.DishList, &model_pb.Dish{
-			Id:       util.NewInt32(int32(modelDish.ID)),
+			Id:       util.NewType[int32](int32(modelDish.ID)),
 			Name:     &modelDish.Name,
 			Price:    &modelDish.Price,
 			Discount: &modelDish.Discount,
@@ -214,6 +214,32 @@ func (server *MSDBCallServer) DeleteDish(ctx context.Context, req *msdbcall.Dele
 		return nil, err
 	}
 
-	resp.Status = util.NewInt32(define.OK)
+	resp.Status = util.NewType[int32](define.OK)
+	return &resp, nil
+}
+
+func (server *MSDBCallServer) GetDishInfo(ctx context.Context, req *msdbcall.GetDishInfoReq) (*msdbcall.GetDishInfoResp, error) {
+	resp := msdbcall.GetDishInfoResp{}
+
+	db := model.NewMySqlConnector()
+
+	protoDish := model_pb.Dish{}
+	modelDish := model.Dish{}
+
+	if err := db.Debug().Model(&model.Dish{}).Where("id = ?", req.GetDishId()).First(&modelDish).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			resp.Status = util.NewType[int32](define.ErrorDishIdNotExist)
+			return &resp, nil
+		}
+		return nil, err
+	}
+
+	protoDish.Id = util.NewType[int32](int32(modelDish.ID))
+	protoDish.Name = &modelDish.Name
+	protoDish.Price = &modelDish.Price
+	protoDish.Detail = &modelDish.Detail
+
+	resp.Dish = &protoDish
+	resp.Status = util.NewType[int32](define.OK)
 	return &resp, nil
 }

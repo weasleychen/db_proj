@@ -3,10 +3,15 @@ package service
 import (
 	"context"
 	"db_proj/define"
+	"db_proj/model"
+	msdbcallclient "db_proj/msdbcall/client"
 	mstablemgr "db_proj/mstablemgr/proto"
+	"db_proj/util"
 	"encoding/json"
 	"fmt"
+	"log"
 	"sort"
+	"time"
 )
 
 type MSTableMgrServer struct {
@@ -26,7 +31,7 @@ func (server *MSTableMgrServer) AddTable(ctx context.Context, req *mstablemgr.Ad
 		return &resp, nil
 	}
 
-	Tables[int(*req.TableId)] = mstablemgr.Table{
+	Tables[int(*req.TableId)] = Table{
 		Id:     *req.TableId,
 		Status: define.TableIsNotInUse,
 	}
@@ -143,6 +148,71 @@ func (server *MSTableMgrServer) OpenTable(ctx context.Context, req *mstablemgr.O
 	table.Status = define.TableIsInUse
 	Tables[int(*req.TableId)] = table
 	status = define.OK
+
+	return &resp, nil
+}
+
+func (server *MSTableMgrServer) OrderDish(ctx context.Context, req *mstablemgr.OrderDishReq) (*mstablemgr.OrderDishResp, error) {
+	Mutex.Lock()
+	defer Mutex.Unlock()
+
+	resp := mstablemgr.OrderDishResp{}
+
+	tableId := int(req.GetTableId())
+
+	if Tables[tableId].Status == define.TableIsNotInUse {
+		resp.Status = util.NewType[int32](define.TableIsNotInUse)
+		return &resp, nil
+	}
+
+	table := Tables[tableId]
+	for _, dishId := range req.GetDishIdList() {
+		log.Println("before call 2rd", time.Now())
+		getDishInfoResp, err := msdbcallclient.CallGetDishInfo(dishId)
+		log.Println("after call 2rd", time.Now())
+		if err != nil {
+			return nil, err
+		}
+
+		if getDishInfoResp.GetStatus() == define.ErrorDishIdNotExist {
+			resp.Status = util.NewType[int32](define.ErrorDishIdNotExist)
+			return &resp, nil
+		}
+
+		modelDish := model.Dish{}
+		modelDish.ID = uint(getDishInfoResp.GetDish().GetId())
+		modelDish.Name = getDishInfoResp.GetDish().GetName()
+		modelDish.Price = getDishInfoResp.GetDish().GetPrice()
+		modelDish.Discount = getDishInfoResp.GetDish().GetDiscount()
+		modelDish.Detail = getDishInfoResp.GetDish().GetDetail()
+
+		table.OrderedDishIdList = append(table.OrderedDishIdList, modelDish)
+	}
+	Tables[tableId] = table
+
+	if req.GetWal() {
+		jsonBytes, _ := json.Marshal(req)
+		WALLog.Write([]byte(fmt.Sprintf("OrderDish %s\n", string(jsonBytes))))
+		Times.Add(1)
+	}
+
+	resp.Status = util.NewType[int32](define.OK)
+	return &resp, nil
+}
+
+func (server *MSTableMgrServer) GetTableInfo(ctx context.Context, req *mstablemgr.GetTableInfoReq) (*mstablemgr.GetTableInfoResp, error) {
+	Mutex.Lock()
+	defer Mutex.Unlock()
+
+	resp := mstablemgr.GetTableInfoResp{}
+
+	tableId := int(req.GetTableId())
+
+	table := Tables[tableId]
+	jsonString := util.MarshalJson(table)
+
+	resp.JsonString = &jsonString
+	resp.Status = util.NewType[int32](define.OK)
 
 	return &resp, nil
 }

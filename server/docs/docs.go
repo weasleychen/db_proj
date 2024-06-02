@@ -141,7 +141,7 @@ const docTemplate = `{
         },
         "/admin/delete-dish": {
             "get": {
-                "description": "\"删除一道菜\"",
+                "description": "\"删除一道菜，如果dish_id不存在，不会返回失败\"",
                 "tags": [
                     "public"
                 ],
@@ -235,6 +235,32 @@ const docTemplate = `{
                 }
             }
         },
+        "/get-dish-info": {
+            "get": {
+                "description": "\"获得菜品详情\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "GetDishInfo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dish_id",
+                        "name": "dish_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/get-dish-list": {
             "get": {
                 "description": "\"获取菜品列表\"",
@@ -252,9 +278,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/get-table-info": {
+            "get": {
+                "description": "\"获取桌台详情，包括桌台状态、点菜等\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "GetTableInfo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "桌台id",
+                        "name": "table_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/get-tables-status": {
             "get": {
-                "description": "\"获得桌台详情\"",
+                "description": "\"获得全部桌台状态\"",
                 "tags": [
                     "public"
                 ],
@@ -365,6 +417,43 @@ const docTemplate = `{
                         "type": "string",
                         "description": "new_password",
                         "name": "new_password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/order-dish": {
+            "post": {
+                "description": "\"点菜\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "OrderDish",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "dish_id",
+                        "name": "dish_id",
                         "in": "formData",
                         "required": true
                     }

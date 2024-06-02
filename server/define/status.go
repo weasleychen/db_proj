@@ -14,4 +14,5 @@ const (
 	ErrorNoSuchUin
 	ErrorNoSuchPhoneNumber
 	ErrorNoSuchEmail
+	ErrorDishIdNotExist
 )

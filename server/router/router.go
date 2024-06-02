@@ -29,6 +29,9 @@ func SetRouter(server *gin.Engine) {
 	server.GET("/get-tables-status", handler.HandleGetTablesStatus)
 	server.POST("/modify-password", handler.HandleModifyPassword)
 	server.GET("/get-dish-list", handler.HandleGetDishList)
+	server.GET("/get-table-info", handler.HandleGetTableInfo)
+	server.POST("/order-dish", handler.HandleOrderDish)
+	server.GET("/get-dish-info", handler.HandleGetDishInfo)
 
 	admin.GET("/add-dish", handler.HandleAddDish)
 	admin.GET("/open-table", handler.HandleOpenTable)
@@ -36,4 +39,6 @@ func SetRouter(server *gin.Engine) {
 	admin.GET("/add-table", handler.HandleAddTable)
 	admin.GET("/del-table", handler.HandleDelTable)
 	admin.GET("/delete-dish", handler.HandleDeleteDish)
+
+	server.Static("/static", "/home/stdforces/static")
 }

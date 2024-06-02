@@ -30,7 +30,7 @@ func RegisterNewHandler(address string, handler mstablemgr.MSTableMgrServer) err
 }
 
 // RecoverFromLog WAL-从日志中恢复数据
-func RecoverFromLog(tables map[int]mstablemgr.Table) {
+func RecoverFromLog(tables map[int]service.Table) {
 	walJsonBytes, err := service.WALRedis.Get(define.DefaultRedisContext, "log").Bytes()
 	if err != nil && !errors.Is(err, redis.Nil) {
 		util.Log("WAL read Redis error: ", err)
@@ -76,6 +76,14 @@ func RecoverFromLog(tables map[int]mstablemgr.Table) {
 			req.Wal = &wal
 
 			(&service.MSTableMgrServer{}).DelTable(context.Background(), &req)
+		} else if reqLog[0] == "OrderDish" {
+			req := mstablemgr.OrderDishReq{}
+			json.Unmarshal([]byte(reqLog[1]), &req)
+			wal := false
+			req.Wal = &wal
+
+			(&service.MSTableMgrServer{}).OrderDish(context.Background(), &req)
+
 		}
 	}
 }
