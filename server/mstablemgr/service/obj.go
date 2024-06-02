@@ -3,15 +3,20 @@ package service
 import (
 	"db_proj/define"
 	"db_proj/model"
-	mstablemgr "db_proj/mstablemgr/proto"
 	"fmt"
 	"os"
 	"sync"
 	"sync/atomic"
 )
 
+type Table struct {
+	Id                int32        `json:"id,omitempty"`
+	Status            int32        `json:"status,omitempty"`
+	OrderedDishIdList []model.Dish `json:"orderedDishIdList"`
+}
+
 var (
-	Tables = map[int]mstablemgr.Table{}
+	Tables = map[int]Table{}
 	Mutex  sync.Mutex
 	Times  atomic.Int32
 
@@ -25,9 +30,10 @@ func init() {
 	defer Mutex.Unlock()
 
 	for i := 1; i <= 10; i++ {
-		Tables[i] = mstablemgr.Table{
-			Id:     int32(i),
-			Status: define.TableIsNotInUse,
+		Tables[i] = Table{
+			Id:                int32(i),
+			Status:            define.TableIsNotInUse,
+			OrderedDishIdList: make([]model.Dish, 0),
 		}
 	}
 }

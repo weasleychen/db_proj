@@ -85,7 +85,7 @@ paths:
       - public
   /admin/delete-dish:
     get:
-      description: '"删除一道菜"'
+      description: '"删除一道菜，如果dish_id不存在，不会返回失败"'
       parameters:
       - description: dish_id
         in: query
@@ -146,6 +146,23 @@ paths:
       summary: CallCheckUserPassword
       tags:
       - public
+  /get-dish-info:
+    get:
+      description: '"获得菜品详情"'
+      parameters:
+      - description: dish_id
+        in: query
+        name: dish_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: GetDishInfo
+      tags:
+      - public
   /get-dish-list:
     get:
       description: '"获取菜品列表"'
@@ -157,9 +174,26 @@ paths:
       summary: GetDishList
       tags:
       - public
+  /get-table-info:
+    get:
+      description: '"获取桌台详情，包括桌台状态、点菜等"'
+      parameters:
+      - description: 桌台id
+        in: query
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: GetTableInfo
+      tags:
+      - public
   /get-tables-status:
     get:
-      description: '"获得桌台详情"'
+      description: '"获得全部桌台状态"'
       responses:
         "200":
           description: OK
@@ -239,6 +273,31 @@ paths:
           schema:
             type: json
       summary: ModifyPassword
+      tags:
+      - public
+  /order-dish:
+    post:
+      description: '"点菜"'
+      parameters:
+      - description: table_id
+        in: query
+        name: table_id
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: dish_id
+        in: formData
+        items:
+          type: string
+        name: dish_id
+        required: true
+        type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: OrderDish
       tags:
       - public
   /ping:

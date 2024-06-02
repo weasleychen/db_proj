@@ -31,6 +31,7 @@ type MSDBCallClient interface {
 	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 	GetDishList(ctx context.Context, in *GetDishListReq, opts ...grpc.CallOption) (*GetDishListResp, error)
 	DeleteDish(ctx context.Context, in *DeleteDishReq, opts ...grpc.CallOption) (*DeleteDishResp, error)
+	GetDishInfo(ctx context.Context, in *GetDishInfoReq, opts ...grpc.CallOption) (*GetDishInfoResp, error)
 }
 
 type mSDBCallClient struct {
@@ -122,6 +123,15 @@ func (c *mSDBCallClient) DeleteDish(ctx context.Context, in *DeleteDishReq, opts
 	return out, nil
 }
 
+func (c *mSDBCallClient) GetDishInfo(ctx context.Context, in *GetDishInfoReq, opts ...grpc.CallOption) (*GetDishInfoResp, error) {
+	out := new(GetDishInfoResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/GetDishInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MSDBCallServer is the server API for MSDBCall service.
 // All implementations must embed UnimplementedMSDBCallServer
 // for forward compatibility
@@ -135,6 +145,7 @@ type MSDBCallServer interface {
 	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
 	GetDishList(context.Context, *GetDishListReq) (*GetDishListResp, error)
 	DeleteDish(context.Context, *DeleteDishReq) (*DeleteDishResp, error)
+	GetDishInfo(context.Context, *GetDishInfoReq) (*GetDishInfoResp, error)
 	mustEmbedUnimplementedMSDBCallServer()
 }
 
@@ -168,6 +179,9 @@ func (UnimplementedMSDBCallServer) GetDishList(context.Context, *GetDishListReq)
 }
 func (UnimplementedMSDBCallServer) DeleteDish(context.Context, *DeleteDishReq) (*DeleteDishResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDish not implemented")
+}
+func (UnimplementedMSDBCallServer) GetDishInfo(context.Context, *GetDishInfoReq) (*GetDishInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDishInfo not implemented")
 }
 func (UnimplementedMSDBCallServer) mustEmbedUnimplementedMSDBCallServer() {}
 
@@ -344,6 +358,24 @@ func _MSDBCall_DeleteDish_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MSDBCall_GetDishInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDishInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).GetDishInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/GetDishInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).GetDishInfo(ctx, req.(*GetDishInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MSDBCall_ServiceDesc is the grpc.ServiceDesc for MSDBCall service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -386,6 +418,10 @@ var MSDBCall_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteDish",
 			Handler:    _MSDBCall_DeleteDish_Handler,
+		},
+		{
+			MethodName: "GetDishInfo",
+			Handler:    _MSDBCall_GetDishInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

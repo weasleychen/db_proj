@@ -1,19 +1,19 @@
 package util
 
-func NewInt32(value int32) *int32 {
-	p := new(int32)
+func NewType[T any](value T) *T {
+	p := new(T)
 	*p = value
 	return p
 }
 
-func NewBool(value bool) *bool {
-	p := new(bool)
-	*p = value
-	return p
+type Number interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~float32 | ~float64
 }
 
-func NewString(value string) *string {
-	p := new(string)
-	*p = value
-	return p
+func ConvertArrayType[T Number, P Number](arr []T) []P {
+	var result []P
+	for index := range arr {
+		result[index] = P(arr[index])
+	}
+	return result
 }

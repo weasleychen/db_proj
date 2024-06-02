@@ -20,7 +20,7 @@ func GetMSTableMgrClient() (func(), *mstablemgr.MSTableMgrClient, *context.Conte
 	}
 
 	mstablemgrclient := mstablemgr.NewMSTableMgrClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
 	callback := func() {
 		conn.Close()
@@ -66,4 +66,19 @@ func CallDelTable(tableId int32) (*mstablemgr.DelTableResp, error) {
 
 	wal := true
 	return (*mstablemgrclient).DelTable(*ctx, &mstablemgr.DelTableReq{TableId: &tableId, Wal: &wal})
+}
+
+func CallOrderDish(tableId int32, dishIdList []int32) (*mstablemgr.OrderDishResp, error) {
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
+	defer callback()
+
+	wal := true
+	return (*mstablemgrclient).OrderDish(*ctx, &mstablemgr.OrderDishReq{TableId: &tableId, DishIdList: dishIdList, Wal: &wal})
+}
+
+func CallGetTableInfo(tableId int32) (*mstablemgr.GetTableInfoResp, error) {
+	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
+	defer callback()
+
+	return (*mstablemgrclient).GetTableInfo(*ctx, &mstablemgr.GetTableInfoReq{TableId: &tableId})
 }

@@ -92,6 +92,15 @@ message DeleteDishResp {
     optional int32 status = 1;
 }
 
+message GetDishInfoReq {
+    optional int32 dish_id = 1;
+}
+
+message GetDishInfoResp {
+    optional int32 status = 1;
+    optional model.Dish dish = 2;
+}
+
 service MSDBCall {
     rpc CreateUser(CreateUserReq) returns(CreateUserResp);
     rpc AddDish(AddDishReq) returns(AddDishResp);
@@ -102,4 +111,5 @@ service MSDBCall {
     rpc GetUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
     rpc GetDishList(GetDishListReq) returns(GetDishListResp);
     rpc DeleteDish(DeleteDishReq) returns(DeleteDishResp);
+    rpc GetDishInfo(GetDishInfoReq) returns (GetDishInfoResp);
 }

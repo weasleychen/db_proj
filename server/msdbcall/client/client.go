@@ -119,3 +119,10 @@ func CallDeleteDish(dishId int32) (*msdbcall.DeleteDishResp, error) {
 
 	return (*client).DeleteDish(*ctx, &req)
 }
+
+func CallGetDishInfo(dishId int32) (*msdbcall.GetDishInfoResp, error) {
+	callback, client, ctx := GetMSDBCallClient()
+	defer callback()
+
+	return (*client).GetDishInfo(*ctx, &msdbcall.GetDishInfoReq{DishId: &dishId})
+}
