@@ -5,10 +5,14 @@
     -p <port> 指定port为监听端口
 
 #### 安装swagger
+``` shell
 go install github.com/go-swagger/go-swagger/cmd/swagger@latest
+```
 
 #### 安装go-grpc和go-grpc-gen
+``` shell
 sudo apt install protobuf
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+```
 
 
