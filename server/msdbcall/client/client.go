@@ -126,3 +126,17 @@ func CallGetDishInfo(dishId int32) (*msdbcall.GetDishInfoResp, error) {
 
 	return (*client).GetDishInfo(*ctx, &msdbcall.GetDishInfoReq{DishId: &dishId})
 }
+
+func CallGetUserDiscount(uin string) (*msdbcall.GetUserDiscountResp, error) {
+	callback, client, ctx := GetMSDBCallClient()
+	defer callback()
+
+	return (*client).GetUserDiscount(*ctx, &msdbcall.GetUserDiscountReq{Uin: &uin})
+}
+
+func CallStoreConsumeRecord(data string) (*msdbcall.StoreConsumeRecordResp, error) {
+	callback, client, ctx := GetMSDBCallClient()
+	defer callback()
+
+	return (*client).StoreConsumeRecord(*ctx, &msdbcall.StoreConsumeRecordReq{Data: &data})
+}
