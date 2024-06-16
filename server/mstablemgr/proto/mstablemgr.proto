@@ -31,6 +31,7 @@ message ChangeTableResp {
 message CompleteTableReq {
     optional int32 table_id = 1;
     optional bool wal = 2;
+    optional string uin = 3;
 }
 
 message CompleteTableResp {

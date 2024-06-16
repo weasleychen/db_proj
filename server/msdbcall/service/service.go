@@ -243,3 +243,38 @@ func (server *MSDBCallServer) GetDishInfo(ctx context.Context, req *msdbcall.Get
 	resp.Status = util.NewType[int32](define.OK)
 	return &resp, nil
 }
+
+func (server *MSDBCallServer) GetUserDiscount(ctx context.Context, req *msdbcall.GetUserDiscountReq) (*msdbcall.GetUserDiscountResp, error) {
+	db := model.NewMySqlConnector()
+
+	user := model.User{}
+	resp := msdbcall.GetUserDiscountResp{}
+
+	if err := db.Where("uin = ", req.GetUin()).Find(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			resp.Status = util.NewType[int32](define.ErrorNoSuchUin)
+			return &resp, nil
+		}
+		return nil, err
+	}
+
+	value, exist := define.VipLevelToDiscount[user.VipLevel]
+	if !exist {
+		resp.Status = util.NewType[int32](define.ErrorNoSuchVipLevel)
+		return &resp, nil
+	}
+
+	resp.Status = util.NewType[int32](define.OK)
+	resp.Discount = util.NewType[float64](value)
+	return &resp, nil
+}
+
+func (server *MSDBCallServer) StoreConsumeRecord(ctx context.Context, req *msdbcall.StoreConsumeRecordReq) (*msdbcall.StoreConsumeRecordResp, error) {
+	db := model.NewMySqlConnector()
+
+	if err := db.Create(&model.ConsumeRecord{Data: req.GetData()}).Error; err != nil {
+		return nil, err
+	}
+
+	return &msdbcall.StoreConsumeRecordResp{Status: util.NewType[int32](define.OK)}, nil
+}

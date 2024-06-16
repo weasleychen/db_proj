@@ -15,4 +15,5 @@ const (
 	ErrorNoSuchPhoneNumber
 	ErrorNoSuchEmail
 	ErrorDishIdNotExist
+	ErrorNoSuchVipLevel
 )

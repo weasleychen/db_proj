@@ -68,6 +68,30 @@ func (server *MSTableMgrServer) CompleteTable(ctx context.Context, req *mstablem
 		jsonBytes, _ := json.Marshal(req)
 		WALLog.Write([]byte(fmt.Sprintf("CompleteTable %s\n", string(jsonBytes))))
 		Times.Add(1)
+
+		getUserDiscountResp, err := msdbcallclient.CallGetUserDiscount(req.GetUin())
+		if err != nil {
+			return nil, err
+		}
+
+		originPrice := 0.0
+		for _, dish := range table.OrderedDishIdList {
+			originPrice += dish.Price * dish.Discount
+		}
+
+		recordJson := util.MarshalJson(&model.ConsumeRecordJson{
+			TableId:       table.Id,
+			Uin:           req.GetUin(),
+			OrderedDishes: table.OrderedDishIdList,
+			Discount:      getUserDiscountResp.GetDiscount(),
+			OriginPrice:   originPrice,
+			FinalPrice:    originPrice * getUserDiscountResp.GetDiscount(),
+		})
+
+		_, err = msdbcallclient.CallStoreConsumeRecord(recordJson)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	table.Status = define.TableIsNotInUse

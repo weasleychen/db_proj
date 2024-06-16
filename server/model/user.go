@@ -11,6 +11,7 @@ type User struct {
 	PhoneNumber string `gorm:"column:phone_number;type:varchar(20);unique" json:"phone_number,omitempty"`
 	Perm        int32  `gorm:"column:perm;type:int" json:"perm,omitempty"`
 	Email       string `gorm:"column:email;type:varchar(20);unique" json:"email,omitempty"`
+	VipLevel    int32  `gorm:"column:vip_level;default:0;type:int" json:"vip_level,omitempty"`
 }
 
 func (obj *User) TableName() string {
