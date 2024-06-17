@@ -30,6 +30,7 @@ type MSDBCallClient interface {
 	GetDishInfo(ctx context.Context, in *GetDishInfoReq, opts ...grpc.CallOption) (*GetDishInfoResp, error)
 	GetUserDiscount(ctx context.Context, in *GetUserDiscountReq, opts ...grpc.CallOption) (*GetUserDiscountResp, error)
 	StoreConsumeRecord(ctx context.Context, in *StoreConsumeRecordReq, opts ...grpc.CallOption) (*StoreConsumeRecordResp, error)
+	GetConsumeRecord(ctx context.Context, in *GetConsumeRecordReq, opts ...grpc.CallOption) (*GetConsumeRecordResp, error)
 }
 
 type mSDBCallClient struct {
@@ -148,6 +149,15 @@ func (c *mSDBCallClient) StoreConsumeRecord(ctx context.Context, in *StoreConsum
 	return out, nil
 }
 
+func (c *mSDBCallClient) GetConsumeRecord(ctx context.Context, in *GetConsumeRecordReq, opts ...grpc.CallOption) (*GetConsumeRecordResp, error) {
+	out := new(GetConsumeRecordResp)
+	err := c.cc.Invoke(ctx, "/msdbcall.MSDBCall/GetConsumeRecord", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MSDBCallServer is the server API for MSDBCall service.
 // All implementations must embed UnimplementedMSDBCallServer
 // for forward compatibility
@@ -164,6 +174,7 @@ type MSDBCallServer interface {
 	GetDishInfo(context.Context, *GetDishInfoReq) (*GetDishInfoResp, error)
 	GetUserDiscount(context.Context, *GetUserDiscountReq) (*GetUserDiscountResp, error)
 	StoreConsumeRecord(context.Context, *StoreConsumeRecordReq) (*StoreConsumeRecordResp, error)
+	GetConsumeRecord(context.Context, *GetConsumeRecordReq) (*GetConsumeRecordResp, error)
 	mustEmbedUnimplementedMSDBCallServer()
 }
 
@@ -206,6 +217,9 @@ func (UnimplementedMSDBCallServer) GetUserDiscount(context.Context, *GetUserDisc
 }
 func (UnimplementedMSDBCallServer) StoreConsumeRecord(context.Context, *StoreConsumeRecordReq) (*StoreConsumeRecordResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StoreConsumeRecord not implemented")
+}
+func (UnimplementedMSDBCallServer) GetConsumeRecord(context.Context, *GetConsumeRecordReq) (*GetConsumeRecordResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetConsumeRecord not implemented")
 }
 func (UnimplementedMSDBCallServer) mustEmbedUnimplementedMSDBCallServer() {}
 
@@ -436,6 +450,24 @@ func _MSDBCall_StoreConsumeRecord_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MSDBCall_GetConsumeRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetConsumeRecordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MSDBCallServer).GetConsumeRecord(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/msdbcall.MSDBCall/GetConsumeRecord",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MSDBCallServer).GetConsumeRecord(ctx, req.(*GetConsumeRecordReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MSDBCall_ServiceDesc is the grpc.ServiceDesc for MSDBCall service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -490,6 +522,10 @@ var MSDBCall_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StoreConsumeRecord",
 			Handler:    _MSDBCall_StoreConsumeRecord_Handler,
+		},
+		{
+			MethodName: "GetConsumeRecord",
+			Handler:    _MSDBCall_GetConsumeRecord_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

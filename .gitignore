@@ -1,7 +1,7 @@
 .vscode/
 .idea/
 
-test/
+server/test/
 log/
 sbin/
 

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"strings"
 	"context"
 	"db_proj/define"
 	"db_proj/model"
@@ -13,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type MSDBCallServer struct {
@@ -105,7 +105,7 @@ func (server *MSDBCallServer) CreateUser(ctx context.Context, req *msdbcall.Crea
 		tx.Rollback()
 		if errors.Is(err, gorm.ErrDuplicatedKey) || strings.Contains(err.Error(), "Duplicate entry") {
 			resp.Code = util.NewType[int32](define.ErrorDuplicatePhoneNumber)
-			return &resp, nil		
+			return &resp, nil
 		}
 		util.Log("mstablemgr-err: %v", err)
 		return nil, err
@@ -242,6 +242,7 @@ func (server *MSDBCallServer) GetDishInfo(ctx context.Context, req *msdbcall.Get
 	protoDish.Id = util.NewType[int32](int32(modelDish.ID))
 	protoDish.Name = &modelDish.Name
 	protoDish.Price = &modelDish.Price
+	protoDish.Discount = &modelDish.Discount
 	protoDish.Detail = &modelDish.Detail
 
 	resp.Dish = &protoDish
@@ -282,4 +283,21 @@ func (server *MSDBCallServer) StoreConsumeRecord(ctx context.Context, req *msdbc
 	}
 
 	return &msdbcall.StoreConsumeRecordResp{Status: util.NewType[int32](define.OK)}, nil
+}
+
+func (server *MSDBCallServer) GetConsumeRecord(ctx context.Context, req *msdbcall.GetConsumeRecordReq) (*msdbcall.GetConsumeRecordResp, error) {
+	db := model.NewMySqlConnector()
+	resp := msdbcall.GetConsumeRecordResp{}
+
+	sql := "select * from ConsumeRecord where ? <= unix_timestamp(created_at) and unix_timestamp(created_at) <= ?"
+	records := make([]model.ConsumeRecord, 0)
+	if err := db.Raw(sql, req.GetStart(), req.GetEnd()).Find(&records).Error; err != nil {
+		return nil, err
+	}
+
+	resp.Status = util.NewType[int32](define.OK)
+	for _, value := range records {
+		resp.Data = append(resp.Data, value.Data)
+	}
+	return &resp, nil
 }

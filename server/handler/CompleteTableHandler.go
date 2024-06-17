@@ -15,6 +15,7 @@ import (
 // @Description "结台"
 // @Tags public
 // @Param table_id query string true "table_id"
+// @Param token query string true "token"
 // @Success 200 {json} {}
 // @Router /admin/complete-table [GET]
 func HandleCompleteTable(ctx *gin.Context) {
@@ -34,13 +35,13 @@ func HandleCompleteTable(ctx *gin.Context) {
 	uin, ok := uinRaw.(string)
 	if !ok {
 		ctx.JSON(http.StatusOK, gin.H{
-                        "success": false,
-                        "message": fmt.Sprintf("unexpected type assertion"),
-                })
+			"success": false,
+			"message": fmt.Sprintf("unexpected type assertion"),
+		})
 
-                util.Log("unexpected type assertion")
-                return
-	}	
+		util.Log("unexpected type assertion")
+		return
+	}
 
 	resp, err := mstablemgrclient.CallCompleteTable(uin, int32(tableId))
 	if err != nil {

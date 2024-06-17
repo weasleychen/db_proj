@@ -39,6 +39,7 @@ func SetRouter(server *gin.Engine) {
 	admin.GET("/add-table", handler.HandleAddTable)
 	admin.GET("/del-table", handler.HandleDelTable)
 	admin.GET("/delete-dish", handler.HandleDeleteDish)
+	admin.GET("/get-turnover", handler.HandleGetConsumeRecord)
 
 	server.Static("/static", "/home/stdforces/static")
 }
