@@ -16,7 +16,7 @@ import (
 // @Tags public
 // @Param table_id query string true "table_id"
 // @Success 200 {json} {}
-// @Router /admin/open-table [GET]
+// @Router /open-table [GET]
 func HandleOpenTable(ctx *gin.Context) {
 	tableIdString := ctx.Query("table_id")
 

@@ -17,7 +17,7 @@ import (
 // @Param start query string true "start"
 // @Param end query string true "end"
 // @Success 200 {json} {}
-// @Router /admin/get-turnover [GET]
+// @Router /admin/get-consume-record [GET]
 func HandleGetConsumeRecord(ctx *gin.Context) {
 	startString, endString := ctx.Query("start"), ctx.Query("end")
 

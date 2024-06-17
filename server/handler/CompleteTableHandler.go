@@ -2,6 +2,7 @@ package handler
 
 import (
 	"db_proj/define"
+	"db_proj/model"
 	mstablemgrclient "db_proj/mstablemgr/client"
 	"db_proj/util"
 	"fmt"
@@ -31,8 +32,8 @@ func HandleCompleteTable(ctx *gin.Context) {
 		return
 	}
 
-	uinRaw, _ := ctx.Get("uin")
-	uin, ok := uinRaw.(string)
+	userRaw, _ := ctx.Get("user")
+	user, ok := userRaw.(model.User)
 	if !ok {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": false,
@@ -43,7 +44,7 @@ func HandleCompleteTable(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := mstablemgrclient.CallCompleteTable(uin, int32(tableId))
+	resp, err := mstablemgrclient.CallCompleteTable(user.Uin, int32(tableId))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
