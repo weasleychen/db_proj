@@ -6,10 +6,9 @@ import (
 	"db_proj/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"strconv"
-	"time"
+	"strings"
 )
 
 // OrderDish
@@ -33,7 +32,7 @@ func HandleOrderDish(ctx *gin.Context) {
 		return
 	}
 
-	dishIdStrings := ctx.PostFormArray("dish_id")
+	dishIdStrings := strings.Split(ctx.PostForm("dish_id"), ",")
 	dishIds := make([]int32, 0)
 
 	for _, dishIdString := range dishIdStrings {
@@ -50,9 +49,7 @@ func HandleOrderDish(ctx *gin.Context) {
 		dishIds = append(dishIds, int32(dishId))
 	}
 
-	log.Println("before call mstablemgrclient.CallOrderDish", time.Now())
 	resp, err := mstablemgrclient.CallOrderDish(int32(tableId), dishIds)
-	log.Println("after call mstablemgrclient.CallOrderDish", time.Now())
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
@@ -73,6 +70,17 @@ func HandleOrderDish(ctx *gin.Context) {
 		return
 	}
 
+	if resp.GetStatus() == define.ErrorDishIdNotExist {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": fmt.Sprintf("dish %v is not exist", resp.NotExistDish),
+		})
+	
+		util.Log("dish %v is not exist", resp.NotExistDish)
+		return
+	}
+
+	util.Log("table %d order dish %v", tableId, dishIds)
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": "true",
 	})

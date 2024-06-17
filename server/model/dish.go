@@ -3,7 +3,7 @@ package model
 import "gorm.io/gorm"
 
 type Dish struct {
-	gorm.Model `json:"gorm.Model"`
+	gorm.Model
 
 	Name     string  `gorm:"column:name; type:varchar(10)" json:"name,omitempty"`
 	Price    float64 `gorm:"column:price; type:double" json:"price,omitempty"`

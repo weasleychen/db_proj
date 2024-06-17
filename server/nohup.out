@@ -1,0 +1,166 @@
+
+2024/04/28 10:58:33 [35m/home/cbq/db_proj/server/model/connector.go:25
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+signal: killed
+
+2024/04/28 23:06:48 [35m/home/cbq/db_proj/server/model/connector.go:25
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x83c709]
+
+goroutine 1 [running]:
+database/sql.(*Row).Scan(0xc000187620?, {0xc00038f9b0?, 0x11?, 0x0?})
+	/home/cbq/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.1.linux-amd64/src/database/sql/sql.go:3443 +0x29
+gorm.io/gorm/migrator.Migrator.CurrentDatabase({{0xe0?, 0xc0001875c0?, {0xb14350?, 0xc00036be30?}}})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:867 +0x87
+gorm.io/driver/mysql.Migrator.CurrentDatabase({{{0x0, 0xc0001875c0, {0xb14350, 0xc00036be30}}}, {0xc00036be30}})
+	/home/cbq/go/pkg/mod/gorm.io/driver/mysql@v1.5.6/migrator.go:411 +0x71
+gorm.io/gorm/migrator.Migrator.HasTable.func1(0xc00041ea80)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:327 +0x42
+gorm.io/gorm/migrator.Migrator.RunWithValue({{0x28?, 0xc0001874d0?, {0xb14350?, 0xc00036be30?}}}, {0x983120, 0xc00026a280}, 0xc00038fbe0)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:74 +0x12b
+gorm.io/gorm/migrator.Migrator.HasTable({{0x0?, 0xc0001874d0?, {0xb14350?, 0xc00036be30?}}}, {0x983120, 0xc00026a280})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:326 +0xd9
+gorm.io/gorm/migrator.Migrator.AutoMigrate({{0x0?, 0xc0001866f0?, {0xb14350?, 0xc00036be30?}}}, {0xc000242140?, 0x0?, 0x0?})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:124 +0xe4
+gorm.io/gorm.(*DB).AutoMigrate(0xc0003514a0?, {0xc000242140, 0x2, 0x2})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator.go:24 +0x42
+db_proj/model.init.0()
+	/home/cbq/db_proj/server/model/connector.go:62 +0xa7
+exit status 2
+signal: interrupt
+
+2024/04/28 23:22:25 [31;1m/home/cbq/db_proj/server/msdbcall/service/CreateUser.go:33 [35;1mrecord not found
+[0m[33m[0.411ms] [34;1m[rows:0][0m SELECT * FROM `User` WHERE name = 'weasleychen' AND `User`.`deleted_at` IS NULL ORDER BY `User`.`id` LIMIT 1
+
+2024/04/29 00:17:21 [31;1m/home/cbq/db_proj/server/msdbcall/service/CreateUser.go:33 [35;1mrecord not found
+[0m[33m[0.426ms] [34;1m[rows:0][0m SELECT * FROM `User` WHERE name = 'test' AND `User`.`deleted_at` IS NULL ORDER BY `User`.`id` LIMIT 1
+
+2024/04/29 00:20:12 [31;1m/home/cbq/db_proj/server/msdbcall/service/CreateUser.go:33 [35;1mrecord not found
+[0m[33m[0.425ms] [34;1m[rows:0][0m SELECT * FROM `User` WHERE name = 'test123' AND `User`.`deleted_at` IS NULL ORDER BY `User`.`id` LIMIT 1
+
+2024/05/06 22:03:19 [35m/home/cbq/db_proj/server/model/connector.go:25
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x83cf29]
+
+goroutine 1 [running]:
+database/sql.(*Row).Scan(0xc0001c7050?, {0xc0001d99b0?, 0x11?, 0x0?})
+	/home/cbq/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.1.linux-amd64/src/database/sql/sql.go:3443 +0x29
+gorm.io/gorm/migrator.Migrator.CurrentDatabase({{0x0?, 0xc0001c6ff0?, {0xb15910?, 0xc0001e9e30?}}})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:867 +0x87
+gorm.io/driver/mysql.Migrator.CurrentDatabase({{{0x0, 0xc0001c6ff0, {0xb15910, 0xc0001e9e30}}}, {0xc0001e9e30}})
+	/home/cbq/go/pkg/mod/gorm.io/driver/mysql@v1.5.6/migrator.go:411 +0x71
+gorm.io/gorm/migrator.Migrator.HasTable.func1(0xc000458c40)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:327 +0x42
+gorm.io/gorm/migrator.Migrator.RunWithValue({{0x28?, 0xc0001c6f00?, {0xb15910?, 0xc0001e9e30?}}}, {0x9842e0, 0xc00024e000}, 0xc0001d9be0)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:74 +0x12b
+gorm.io/gorm/migrator.Migrator.HasTable({{0x0?, 0xc0001c6f00?, {0xb15910?, 0xc0001e9e30?}}}, {0x9842e0, 0xc00024e000})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:326 +0xd9
+gorm.io/gorm/migrator.Migrator.AutoMigrate({{0x0?, 0xc0001c6120?, {0xb15910?, 0xc0001e9e30?}}}, {0xc000230080?, 0x0?, 0x0?})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:124 +0xe4
+gorm.io/gorm.(*DB).AutoMigrate(0xc0001ab350?, {0xc000230080, 0x2, 0x2})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator.go:24 +0x42
+db_proj/model.init.0()
+	/home/cbq/db_proj/server/model/connector.go:63 +0xa7
+
+2024/05/06 22:03:37 [35m/home/cbq/db_proj/server/model/connector.go:25
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x83cf29]
+
+goroutine 1 [running]:
+database/sql.(*Row).Scan(0xc0000930e0?, {0xc0003679b0?, 0x11?, 0x0?})
+	/home/cbq/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.1.linux-amd64/src/database/sql/sql.go:3443 +0x29
+gorm.io/gorm/migrator.Migrator.CurrentDatabase({{0x0?, 0xc000093080?, {0xb15910?, 0xc000377ea0?}}})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:867 +0x87
+gorm.io/driver/mysql.Migrator.CurrentDatabase({{{0x0, 0xc000093080, {0xb15910, 0xc000377ea0}}}, {0xc000377ea0}})
+	/home/cbq/go/pkg/mod/gorm.io/driver/mysql@v1.5.6/migrator.go:411 +0x71
+gorm.io/gorm/migrator.Migrator.HasTable.func1(0xc00023e700)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:327 +0x42
+gorm.io/gorm/migrator.Migrator.RunWithValue({{0x28?, 0xc000092f90?, {0xb15910?, 0xc000377ea0?}}}, {0x9842e0, 0xc00023a000}, 0xc000367be0)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:74 +0x12b
+gorm.io/gorm/migrator.Migrator.HasTable({{0x0?, 0xc000092f90?, {0xb15910?, 0xc000377ea0?}}}, {0x9842e0, 0xc00023a000})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:326 +0xd9
+gorm.io/gorm/migrator.Migrator.AutoMigrate({{0x0?, 0xc0000921b0?, {0xb15910?, 0xc000377ea0?}}}, {0xc0000700a0?, 0x0?, 0x0?})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:124 +0xe4
+gorm.io/gorm.(*DB).AutoMigrate(0xc0003374a0?, {0xc0000700a0, 0x2, 0x2})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator.go:24 +0x42
+db_proj/model.init.0()
+	/home/cbq/db_proj/server/model/connector.go:63 +0xa7
+
+2024/05/06 22:04:46 [35m/home/cbq/db_proj/server/model/connector.go:25
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x83cf29]
+
+goroutine 1 [running]:
+database/sql.(*Row).Scan(0xc0004b0a50?, {0xc0003999b0?, 0x11?, 0x0?})
+	/home/cbq/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.1.linux-amd64/src/database/sql/sql.go:3443 +0x29
+gorm.io/gorm/migrator.Migrator.CurrentDatabase({{0x20?, 0xc0004b09f0?, {0xb15910?, 0xc00047fe30?}}})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:867 +0x87
+gorm.io/driver/mysql.Migrator.CurrentDatabase({{{0x0, 0xc0004b09f0, {0xb15910, 0xc00047fe30}}}, {0xc00047fe30}})
+	/home/cbq/go/pkg/mod/gorm.io/driver/mysql@v1.5.6/migrator.go:411 +0x71
+gorm.io/gorm/migrator.Migrator.HasTable.func1(0xc0000d3500)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:327 +0x42
+gorm.io/gorm/migrator.Migrator.RunWithValue({{0x0?, 0xc0004b0900?, {0xb15910?, 0xc00047fe30?}}}, {0x9842e0, 0xc000371180}, 0xc000399be0)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:74 +0x12b
+gorm.io/gorm/migrator.Migrator.HasTable({{0x0?, 0xc0004b0900?, {0xb15910?, 0xc00047fe30?}}}, {0x9842e0, 0xc000371180})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:326 +0xd9
+gorm.io/gorm/migrator.Migrator.AutoMigrate({{0x0?, 0xc000187e60?, {0xb15910?, 0xc00047fe30?}}}, {0xc00032cc20?, 0x0?, 0x0?})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:124 +0xe4
+gorm.io/gorm.(*DB).AutoMigrate(0xc000433740?, {0xc00032cc20, 0x2, 0x2})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator.go:24 +0x42
+db_proj/model.init.0()
+	/home/cbq/db_proj/server/model/connector.go:63 +0xa7
+
+2024/05/06 22:05:42 [35m/home/cbq/db_proj/server/model/connector.go:25
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x83cf29]
+
+goroutine 1 [running]:
+database/sql.(*Row).Scan(0xc00016bce0?, {0xc0001559b0?, 0x11?, 0x0?})
+	/home/cbq/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.1.linux-amd64/src/database/sql/sql.go:3443 +0x29
+gorm.io/gorm/migrator.Migrator.CurrentDatabase({{0x0?, 0xc00016bc80?, {0xb15910?, 0xc000165e30?}}})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:867 +0x87
+gorm.io/driver/mysql.Migrator.CurrentDatabase({{{0x0, 0xc00016bc80, {0xb15910, 0xc000165e30}}}, {0xc000165e30}})
+	/home/cbq/go/pkg/mod/gorm.io/driver/mysql@v1.5.6/migrator.go:411 +0x71
+gorm.io/gorm/migrator.Migrator.HasTable.func1(0xc000421180)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:327 +0x42
+gorm.io/gorm/migrator.Migrator.RunWithValue({{0x28?, 0xc00016bb90?, {0xb15910?, 0xc000165e30?}}}, {0x9842e0, 0xc000159540}, 0xc000155be0)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:74 +0x12b
+gorm.io/gorm/migrator.Migrator.HasTable({{0x0?, 0xc00016bb90?, {0xb15910?, 0xc000165e30?}}}, {0x9842e0, 0xc000159540})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:326 +0xd9
+gorm.io/gorm/migrator.Migrator.AutoMigrate({{0x0?, 0xc00016adb0?, {0xb15910?, 0xc000165e30?}}}, {0xc000142080?, 0x0?, 0x0?})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:124 +0xe4
+gorm.io/gorm.(*DB).AutoMigrate(0xc00016a4e0?, {0xc000142080, 0x2, 0x2})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator.go:24 +0x42
+db_proj/model.init.0()
+	/home/cbq/db_proj/server/model/connector.go:63 +0xa7
+signal: killed
+
+2024/05/06 22:11:21 [35m/home/cbq/db_proj/server/model/connector.go:25
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x8b0469]
+
+goroutine 1 [running]:
+database/sql.(*Row).Scan(0xc0002c2120?, {0xc00039d9b0?, 0x11?, 0x0?})
+	/home/cbq/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.1.linux-amd64/src/database/sql/sql.go:3443 +0x29
+gorm.io/gorm/migrator.Migrator.CurrentDatabase({{0xa0?, 0xc0002c20c0?, {0xbb95c0?, 0xc0003afce0?}}})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:867 +0x87
+gorm.io/driver/mysql.Migrator.CurrentDatabase({{{0x0, 0xc0002c20c0, {0xbb95c0, 0xc0003afce0}}}, {0xc0003afce0}})
+	/home/cbq/go/pkg/mod/gorm.io/driver/mysql@v1.5.6/migrator.go:411 +0x71
+gorm.io/gorm/migrator.Migrator.HasTable.func1(0xc000107c00)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:327 +0x42
+gorm.io/gorm/migrator.Migrator.RunWithValue({{0x28?, 0xc000117f50?, {0xbb95c0?, 0xc0003afce0?}}}, {0xa05960, 0xc00011a1e0}, 0xc00039dbe0)
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:74 +0x12b
+gorm.io/gorm/migrator.Migrator.HasTable({{0x0?, 0xc000117f50?, {0xbb95c0?, 0xc0003afce0?}}}, {0xa05960, 0xc00011a1e0})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:326 +0xd9
+gorm.io/gorm/migrator.Migrator.AutoMigrate({{0x0?, 0xc000117170?, {0xbb95c0?, 0xc0003afce0?}}}, {0xc0001641a0?, 0x0?, 0x0?})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator/migrator.go:124 +0xe4
+gorm.io/gorm.(*DB).AutoMigrate(0xc0003b2570?, {0xc0001641a0, 0x2, 0x2})
+	/home/cbq/go/pkg/mod/gorm.io/gorm@v1.25.9/migrator.go:24 +0x42
+db_proj/model.init.0()
+	/home/cbq/db_proj/server/model/connector.go:63 +0xa7

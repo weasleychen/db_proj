@@ -9,9 +9,7 @@ import (
 	"db_proj/util"
 	"encoding/json"
 	"fmt"
-	"log"
 	"sort"
-	"time"
 )
 
 type MSTableMgrServer struct {
@@ -65,10 +63,6 @@ func (server *MSTableMgrServer) CompleteTable(ctx context.Context, req *mstablem
 	}
 
 	if *req.Wal {
-		jsonBytes, _ := json.Marshal(req)
-		WALLog.Write([]byte(fmt.Sprintf("CompleteTable %s\n", string(jsonBytes))))
-		Times.Add(1)
-
 		getUserDiscountResp, err := msdbcallclient.CallGetUserDiscount(req.GetUin())
 		if err != nil {
 			return nil, err
@@ -92,6 +86,10 @@ func (server *MSTableMgrServer) CompleteTable(ctx context.Context, req *mstablem
 		if err != nil {
 			return nil, err
 		}
+		
+		jsonBytes, _ := json.Marshal(req)
+                WALLog.Write([]byte(fmt.Sprintf("CompleteTable %s\n", string(jsonBytes))))
+                Times.Add(1)
 	}
 
 	table.Status = define.TableIsNotInUse
@@ -177,6 +175,7 @@ func (server *MSTableMgrServer) OpenTable(ctx context.Context, req *mstablemgr.O
 }
 
 func (server *MSTableMgrServer) OrderDish(ctx context.Context, req *mstablemgr.OrderDishReq) (*mstablemgr.OrderDishResp, error) {
+	fmt.Printf("Order Dish\n")
 	Mutex.Lock()
 	defer Mutex.Unlock()
 
@@ -189,29 +188,36 @@ func (server *MSTableMgrServer) OrderDish(ctx context.Context, req *mstablemgr.O
 		return &resp, nil
 	}
 
-	table := Tables[tableId]
+	isSomeDishNotExist := false
+	dishes := make([]model.Dish, 0)
 	for _, dishId := range req.GetDishIdList() {
-		log.Println("before call 2rd", time.Now())
 		getDishInfoResp, err := msdbcallclient.CallGetDishInfo(dishId)
-		log.Println("after call 2rd", time.Now())
-		if err != nil {
-			return nil, err
-		}
-
+                if err != nil {
+                        return nil, err
+                }
+	
 		if getDishInfoResp.GetStatus() == define.ErrorDishIdNotExist {
-			resp.Status = util.NewType[int32](define.ErrorDishIdNotExist)
-			return &resp, nil
+			isSomeDishNotExist = true
+			resp.NotExistDish = append(resp.NotExistDish, dishId)	
+		} else {
+			modelDish := model.Dish{}
+                	modelDish.ID = uint(getDishInfoResp.GetDish().GetId())
+               		modelDish.Name = getDishInfoResp.GetDish().GetName()
+               		modelDish.Price = getDishInfoResp.GetDish().GetPrice()
+        	        modelDish.Discount = getDishInfoResp.GetDish().GetDiscount()
+                	modelDish.Detail = getDishInfoResp.GetDish().GetDetail()
+		
+			dishes = append(dishes, modelDish)
 		}
-
-		modelDish := model.Dish{}
-		modelDish.ID = uint(getDishInfoResp.GetDish().GetId())
-		modelDish.Name = getDishInfoResp.GetDish().GetName()
-		modelDish.Price = getDishInfoResp.GetDish().GetPrice()
-		modelDish.Discount = getDishInfoResp.GetDish().GetDiscount()
-		modelDish.Detail = getDishInfoResp.GetDish().GetDetail()
-
-		table.OrderedDishIdList = append(table.OrderedDishIdList, modelDish)
 	}
+
+	if isSomeDishNotExist {
+		resp.Status = util.NewType[int32](define.ErrorDishIdNotExist)
+		return &resp, nil
+	}
+
+	table := Tables[tableId]
+	table.OrderedDishIdList = append(table.OrderedDishIdList, dishes...)
 	Tables[tableId] = table
 
 	if req.GetWal() {

@@ -13,6 +13,7 @@ go install github.com/go-swagger/go-swagger/cmd/swagger@latest
 ``` shell
 sudo apt install protobuf
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+go install google.golang.org/protobuf/cmd/protoc-gen-go
 ```
 
 

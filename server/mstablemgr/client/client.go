@@ -37,12 +37,12 @@ func CallOpenTable(tableId int32) (*mstablemgr.OpenTableResp, error) {
 	return (*mstablemgrclient).OpenTable(*ctx, &mstablemgr.OpenTableReq{TableId: &tableId, Wal: &wal})
 }
 
-func CallCompleteTable(tableId int32) (*mstablemgr.CompleteTableResp, error) {
+func CallCompleteTable(uin string, tableId int32) (*mstablemgr.CompleteTableResp, error) {
 	callback, mstablemgrclient, ctx := GetMSTableMgrClient()
 	defer callback()
 
 	wal := true
-	return (*mstablemgrclient).CompleteTable(*ctx, &mstablemgr.CompleteTableReq{TableId: &tableId, Wal: &wal})
+	return (*mstablemgrclient).CompleteTable(*ctx, &mstablemgr.CompleteTableReq{TableId: &tableId, Uin: &uin, Wal: &wal})
 }
 
 func CallGetTablesStatus() (*mstablemgr.GetTablesStatusResp, error) {
