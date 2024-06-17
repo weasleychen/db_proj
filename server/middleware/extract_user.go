@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func ExtractToken() gin.HandlerFunc {
+func ExtractUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.Query("token")
 		if len(token) == 0 {
@@ -34,10 +34,10 @@ func ExtractToken() gin.HandlerFunc {
 			})
 
 			ctx.Abort()
-			return	
+			return
 		}
 
-		ctx.Set("uin", user.Uin)
+		ctx.Set("user", user)
 		ctx.Next()
 	}
 }
