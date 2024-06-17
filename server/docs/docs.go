@@ -519,7 +519,15 @@ const docTemplate = `{
                         "type": "string",
                         "description": "手机",
                         "name": "phone_number",
-                        "in": "formData"
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {

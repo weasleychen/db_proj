@@ -1,5 +1,7 @@
 package model
 
+import "gorm.io/gorm"
+
 type ConsumeRecordJson struct {
 	TableId       int32   `json:"table_id"`
 	Uin           string  `json:"uin"`
@@ -10,6 +12,7 @@ type ConsumeRecordJson struct {
 }
 
 type ConsumeRecord struct {
+	gorm.Model
 	Data string `gorm:"type:text"`
 }
 

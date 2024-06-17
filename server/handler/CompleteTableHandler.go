@@ -30,7 +30,19 @@ func HandleCompleteTable(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := mstablemgrclient.CallCompleteTable(int32(tableId))
+	uinRaw, _ := ctx.Get("uin")
+	uin, ok := uinRaw.(string)
+	if !ok {
+		ctx.JSON(http.StatusOK, gin.H{
+                        "success": false,
+                        "message": fmt.Sprintf("unexpected type assertion"),
+                })
+
+                util.Log("unexpected type assertion")
+                return
+	}	
+
+	resp, err := mstablemgrclient.CallCompleteTable(uin, int32(tableId))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

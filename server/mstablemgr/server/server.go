@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"bufio"
 	"context"
 	"db_proj/define"
@@ -14,6 +15,7 @@ import (
 	"log"
 	"net"
 	"strings"
+	"time"
 )
 
 func RegisterNewHandler(address string, handler mstablemgr.MSTableMgrServer) error {
@@ -54,36 +56,42 @@ func RecoverFromLog(tables map[int]service.Table) {
 			wal := false
 			req.Wal = &wal
 
-			(&service.MSTableMgrServer{}).OpenTable(context.Background(), &req)
+			resp, err := (&service.MSTableMgrServer{}).OpenTable(context.Background(), &req)
+			util.Log("log: %v, resp: %v, err: %v", reqLog, resp, err)
 		} else if reqLog[0] == "CompleteTable" {
 			req := mstablemgr.CompleteTableReq{}
 			json.Unmarshal([]byte(reqLog[1]), &req)
 			wal := false
 			req.Wal = &wal
 
-			(&service.MSTableMgrServer{}).CompleteTable(context.Background(), &req)
+			resp, err := (&service.MSTableMgrServer{}).CompleteTable(context.Background(), &req)
+			util.Log("log: %v, resp: %v, err: %v", reqLog, resp, err)
 		} else if reqLog[0] == "AddTable" {
 			req := mstablemgr.AddTableReq{}
 			json.Unmarshal([]byte(reqLog[1]), &req)
 			wal := false
 			req.Wal = &wal
 
-			(&service.MSTableMgrServer{}).AddTable(context.Background(), &req)
+			resp, err := (&service.MSTableMgrServer{}).AddTable(context.Background(), &req)
+			util.Log("log: %v, resp: %v, err: %v", reqLog, resp, err)
 		} else if reqLog[0] == "DelTable" {
 			req := mstablemgr.DelTableReq{}
 			json.Unmarshal([]byte(reqLog[1]), &req)
 			wal := false
 			req.Wal = &wal
 
-			(&service.MSTableMgrServer{}).DelTable(context.Background(), &req)
+			resp, err := (&service.MSTableMgrServer{}).DelTable(context.Background(), &req)
+			util.Log("log: %v, resp: %v, err: %v", reqLog, resp, err)
 		} else if reqLog[0] == "OrderDish" {
 			req := mstablemgr.OrderDishReq{}
 			json.Unmarshal([]byte(reqLog[1]), &req)
 			wal := false
 			req.Wal = &wal
 
-			(&service.MSTableMgrServer{}).OrderDish(context.Background(), &req)
-
+			resp, err := (&service.MSTableMgrServer{}).OrderDish(context.Background(), &req)
+			util.Log("log: %v, resp: %v, err: %v", reqLog, resp, err)
+		} else {
+			fmt.Printf("unexpected branch: %v\n", reqLog)
 		}
 	}
 }
@@ -102,10 +110,12 @@ func PersistTables() {
 			service.WALLog.Truncate(0)
 			service.Times.Store(0)
 		}
+		time.Sleep(1 * time.Second)
 	}
 }
 
 func init() {
+	time.Sleep(2 * time.Second)
 	RecoverFromLog(service.Tables)
 	go PersistTables()
 }

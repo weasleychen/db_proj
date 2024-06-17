@@ -85,7 +85,8 @@ message OrderDishReq {
 }
 
 message OrderDishResp {
-    optional int32 status = 2;
+    optional int32 status = 1;
+	repeated int32 not_exist_dish = 2;
 }
 
 message GetTableInfoReq {

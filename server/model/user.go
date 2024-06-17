@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type User struct {
 	gorm.Model `json:"-"`
 
-	Uin         string `gorm:"column:uint;type:varchar(64);unique" json:"uin,omitempty"`
+	Uin         string `gorm:"column:uin;type:varchar(64);unique" json:"uin,omitempty"`
 	Name        string `gorm:"column:name;type:varchar(20)" json:"name,omitempty"`
 	Password    string `gorm:"column:password;type:varchar(20)" json:"-"`
 	PhoneNumber string `gorm:"column:phone_number;type:varchar(20);unique" json:"phone_number,omitempty"`

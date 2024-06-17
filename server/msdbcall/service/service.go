@@ -1,6 +1,7 @@
 package service
 
 import (
+	"strings"
 	"context"
 	"db_proj/define"
 	"db_proj/model"
@@ -102,8 +103,12 @@ func (server *MSDBCallServer) CreateUser(ctx context.Context, req *msdbcall.Crea
 
 	if err := tx.Create(&user).Error; err != nil {
 		tx.Rollback()
-		resp.Code = util.NewType[int32](define.ErrorCreateUser)
-		return &resp, err
+		if errors.Is(err, gorm.ErrDuplicatedKey) || strings.Contains(err.Error(), "Duplicate entry") {
+			resp.Code = util.NewType[int32](define.ErrorDuplicatePhoneNumber)
+			return &resp, nil		
+		}
+		util.Log("mstablemgr-err: %v", err)
+		return nil, err
 	}
 
 	tx.Commit()
@@ -250,7 +255,7 @@ func (server *MSDBCallServer) GetUserDiscount(ctx context.Context, req *msdbcall
 	user := model.User{}
 	resp := msdbcall.GetUserDiscountResp{}
 
-	if err := db.Where("uin = ", req.GetUin()).Find(&user).Error; err != nil {
+	if err := db.Where("uin = ?", req.GetUin()).Find(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			resp.Status = util.NewType[int32](define.ErrorNoSuchUin)
 			return &resp, nil
@@ -272,7 +277,7 @@ func (server *MSDBCallServer) GetUserDiscount(ctx context.Context, req *msdbcall
 func (server *MSDBCallServer) StoreConsumeRecord(ctx context.Context, req *msdbcall.StoreConsumeRecordReq) (*msdbcall.StoreConsumeRecordResp, error) {
 	db := model.NewMySqlConnector()
 
-	if err := db.Create(&model.ConsumeRecord{Data: req.GetData()}).Error; err != nil {
+	if err := db.Debug().Model(&model.ConsumeRecord{}).Create(&model.ConsumeRecord{Data: req.GetData()}).Error; err != nil {
 		return nil, err
 	}
 

@@ -333,6 +333,12 @@ paths:
       - description: 手机
         in: formData
         name: phone_number
+        required: true
+        type: string
+      - description: 邮箱
+        in: formData
+        name: email
+        required: true
         type: string
       responses:
         "200":

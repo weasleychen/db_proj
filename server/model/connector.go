@@ -10,7 +10,7 @@ import (
 
 // mysql connector
 const (
-	dsn = "root:123456@(localhost:3306)/db_proj?timeout=5000ms&readTimeout=5000ms&writeTimeout=5000ms&charset=utf8mb4&parseTime=true&loc=Local"
+	dsn = "cbq:Cbq123456#@(localhost:3306)/db_proj?timeout=5000ms&readTimeout=5000ms&writeTimeout=5000ms&charset=utf8mb4&parseTime=true&loc=Local"
 )
 
 type mySqlConnector struct {
@@ -60,5 +60,5 @@ func (obj *redisConnector) GetRedisClient() *redis.Client {
 // auto gen
 func init() {
 	db := NewMySqlConnector()
-	db.AutoMigrate(&User{}, &Dish{})
+	db.AutoMigrate(&User{}, &Dish{}, &ConsumeRecord{})
 }
