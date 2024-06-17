@@ -71,6 +71,7 @@ func (server *MSTableMgrServer) CompleteTable(ctx context.Context, req *mstablem
 		originPrice := 0.0
 		for _, dish := range table.OrderedDishIdList {
 			originPrice += dish.Price * dish.Discount
+			util.Log("dish.price: %v, discount: %v", dish.Price, dish.Discount)
 		}
 
 		recordJson := util.MarshalJson(&model.ConsumeRecordJson{
@@ -86,14 +87,17 @@ func (server *MSTableMgrServer) CompleteTable(ctx context.Context, req *mstablem
 		if err != nil {
 			return nil, err
 		}
-		
+
 		jsonBytes, _ := json.Marshal(req)
-                WALLog.Write([]byte(fmt.Sprintf("CompleteTable %s\n", string(jsonBytes))))
-                Times.Add(1)
+		WALLog.Write([]byte(fmt.Sprintf("CompleteTable %s\n", string(jsonBytes))))
+		Times.Add(1)
 	}
 
-	table.Status = define.TableIsNotInUse
-	Tables[int(*req.TableId)] = table
+	Tables[int(req.GetTableId())] = Table{
+		Id:                req.GetTableId(),
+		Status:            define.TableIsNotInUse,
+		OrderedDishIdList: make([]model.Dish, 0),
+	}
 	status = define.OK
 
 	return &resp, nil
@@ -192,21 +196,21 @@ func (server *MSTableMgrServer) OrderDish(ctx context.Context, req *mstablemgr.O
 	dishes := make([]model.Dish, 0)
 	for _, dishId := range req.GetDishIdList() {
 		getDishInfoResp, err := msdbcallclient.CallGetDishInfo(dishId)
-                if err != nil {
-                        return nil, err
-                }
-	
+		if err != nil {
+			return nil, err
+		}
+
 		if getDishInfoResp.GetStatus() == define.ErrorDishIdNotExist {
 			isSomeDishNotExist = true
-			resp.NotExistDish = append(resp.NotExistDish, dishId)	
+			resp.NotExistDish = append(resp.NotExistDish, dishId)
 		} else {
 			modelDish := model.Dish{}
-                	modelDish.ID = uint(getDishInfoResp.GetDish().GetId())
-               		modelDish.Name = getDishInfoResp.GetDish().GetName()
-               		modelDish.Price = getDishInfoResp.GetDish().GetPrice()
-        	        modelDish.Discount = getDishInfoResp.GetDish().GetDiscount()
-                	modelDish.Detail = getDishInfoResp.GetDish().GetDetail()
-		
+			modelDish.ID = uint(getDishInfoResp.GetDish().GetId())
+			modelDish.Name = getDishInfoResp.GetDish().GetName()
+			modelDish.Price = getDishInfoResp.GetDish().GetPrice()
+			modelDish.Discount = getDishInfoResp.GetDish().GetDiscount()
+			modelDish.Detail = getDishInfoResp.GetDish().GetDetail()
+
 			dishes = append(dishes, modelDish)
 		}
 	}

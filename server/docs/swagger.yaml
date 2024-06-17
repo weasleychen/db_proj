@@ -58,6 +58,11 @@ paths:
         name: table_id
         required: true
         type: string
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -98,6 +103,28 @@ paths:
           schema:
             type: json
       summary: DeleteDish
+      tags:
+      - public
+  /admin/get-turnover:
+    get:
+      description: '"获取营业额"'
+      parameters:
+      - description: start
+        in: query
+        name: start
+        required: true
+        type: string
+      - description: end
+        in: query
+        name: end
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: GetTurnover
       tags:
       - public
   /admin/open-table:

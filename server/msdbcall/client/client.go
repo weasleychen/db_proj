@@ -140,3 +140,10 @@ func CallStoreConsumeRecord(data string) (*msdbcall.StoreConsumeRecordResp, erro
 
 	return (*client).StoreConsumeRecord(*ctx, &msdbcall.StoreConsumeRecordReq{Data: &data})
 }
+
+func CallGetTurnover(start, end uint32) (*msdbcall.GetConsumeRecordResp, error) {
+	callback, client, ctx := GetMSDBCallClient()
+	defer callback()
+
+	return (*client).GetConsumeRecord(*ctx, &msdbcall.GetConsumeRecordReq{Start: &start, End: &end})
+}

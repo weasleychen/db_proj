@@ -101,6 +101,13 @@ const docTemplate = `{
                         "name": "table_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -151,6 +158,39 @@ const docTemplate = `{
                         "type": "string",
                         "description": "dish_id",
                         "name": "dish_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/get-turnover": {
+            "get": {
+                "description": "\"获取营业额\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "GetTurnover",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "start",
+                        "name": "start",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "end",
+                        "name": "end",
                         "in": "query",
                         "required": true
                     }
