@@ -17,6 +17,7 @@ import (
 // @Description "管理员新增用户"
 // @Tags public
 // @Param phone_number formData string true "手机号"
+// @Param email formData string true "邮箱"
 // @Param password formData string true "MD5加密密码"
 // @Param perm formData string true "权限"
 // @Success 200 {json} {}
@@ -65,7 +66,7 @@ func HandleAdminAddUser(ctx *gin.Context) {
 	}
 
 	if resp.GetCode() == define.ErrorDuplicatePhoneNumber {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 			"message": "duplicate phone_number",
 		})
