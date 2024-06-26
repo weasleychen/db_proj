@@ -76,6 +76,46 @@
                 }
             }
         },
+        "/admin/admin-add-user": {
+            "post": {
+                "description": "\"管理员新增用户\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "AdminAddUser",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "手机号",
+                        "name": "phone_number",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "MD5加密密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "权限",
+                        "name": "perm",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/complete-table": {
             "get": {
                 "description": "\"结台\"",
@@ -336,7 +376,7 @@
                         "type": "string",
                         "description": "手机号",
                         "name": "phone_number",
-                        "in": "query",
+                        "in": "formData",
                         "required": true
                     },
                     {

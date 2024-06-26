@@ -19,10 +19,10 @@ import (
 // @Router /login [POST]
 func HandleLogin(ctx *gin.Context) {
 	// 支持三种登录方式，不过只开放了phone_number
-	phone_number := ctx.PostForm("phone_number")
+	phoneNumber := ctx.PostForm("phone_number")
 	password := ctx.PostForm("password")
 
-	if phone_number == "" {
+	if phoneNumber == "" {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 			"message": "phone number is empty",
@@ -32,7 +32,7 @@ func HandleLogin(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := msdbcallclient.CallCheckUserPassword("", phone_number, "", password)
+	resp, err := msdbcallclient.CallCheckUserPassword("", phoneNumber, "", password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
@@ -43,7 +43,7 @@ func HandleLogin(ctx *gin.Context) {
 	}
 
 	if resp.GetStatus() == define.OK {
-		getUserInfoResp, err := msdbcallclient.CallGetUserInfo(ctx.Query("uin"), ctx.Query("phone_number"), ctx.Query("email"))
+		getUserInfoResp, err := msdbcallclient.CallGetUserInfo("", phoneNumber, "")
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"success": "false",
