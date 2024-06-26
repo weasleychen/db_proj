@@ -172,7 +172,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/get-turnover": {
+        "/admin/get-consume-record": {
             "get": {
                 "description": "\"获取营业额\"",
                 "tags": [
@@ -191,32 +191,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "end",
                         "name": "end",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "json"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/open-table": {
-            "get": {
-                "description": "\"开台\"",
-                "tags": [
-                    "public"
-                ],
-                "summary": "OpenTable",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "table_id",
-                        "name": "table_id",
                         "in": "query",
                         "required": true
                     }
@@ -458,6 +432,32 @@ const docTemplate = `{
                         "description": "new_password",
                         "name": "new_password",
                         "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/open-table": {
+            "get": {
+                "description": "\"开台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "OpenTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "query",
                         "required": true
                     }
                 ],

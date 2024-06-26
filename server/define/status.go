@@ -17,4 +17,5 @@ const (
 	ErrorDishIdNotExist
 	ErrorNoSuchVipLevel
 	ErrorDuplicatePhoneNumber
+	ErrorArgsInvalid
 )

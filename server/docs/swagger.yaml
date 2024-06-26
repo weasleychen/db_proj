@@ -105,7 +105,7 @@ paths:
       summary: DeleteDish
       tags:
       - public
-  /admin/get-turnover:
+  /admin/get-consume-record:
     get:
       description: '"获取营业额"'
       parameters:
@@ -125,23 +125,6 @@ paths:
           schema:
             type: json
       summary: GetTurnover
-      tags:
-      - public
-  /admin/open-table:
-    get:
-      description: '"开台"'
-      parameters:
-      - description: table_id
-        in: query
-        name: table_id
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: json
-      summary: OpenTable
       tags:
       - public
   /check-user-password:
@@ -300,6 +283,23 @@ paths:
           schema:
             type: json
       summary: ModifyPassword
+      tags:
+      - public
+  /open-table:
+    get:
+      description: '"开台"'
+      parameters:
+      - description: table_id
+        in: query
+        name: table_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: OpenTable
       tags:
       - public
   /order-dish:

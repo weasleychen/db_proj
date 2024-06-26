@@ -9,26 +9,48 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
-// Register
-// @Summary Register
-// @Description "注册新用户"
+// AdminAddUser
+// @Summary AdminAddUser
+// @Description "管理员新增用户"
 // @Tags public
-// @Param name formData string true "用户名"
+// @Param phone_number formData string true "手机号"
 // @Param password formData string true "MD5加密密码"
-// @Param phone_number formData string true "手机"
-// @Param email formData string true "邮箱"
+// @Param perm formData string true "权限"
 // @Success 200 {json} {}
-// @Router /register [POST]
-func HandleRegister(ctx *gin.Context) {
+// @Router /admin/admin-add-user [POST]
+func HandleAdminAddUser(ctx *gin.Context) {
+	permString := ctx.PostForm("perm")
+	if permString == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty perm",
+		})
+
+		util.Log("empty perm")
+		return
+	}
+
+	perm, err := strconv.ParseInt(permString, 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": fmt.Sprintf("Parse perm error, your perm: %s", permString),
+		})
+
+		util.Log("Parse perm error, your perm: %d", permString)
+		return
+	}
+
 	user := model.User{
 		Uin:         util.GenNewUin(),
 		Name:        ctx.PostForm("name"),
 		Password:    ctx.PostForm("password"),
 		PhoneNumber: ctx.PostForm("phone_number"),
 		Email:       ctx.PostForm("email"),
-		Perm:        define.NormalPerm,
+		Perm:        int32(perm),
 	}
 
 	resp, err := msdbcallclient.CallCreateUser(user)
