@@ -49,6 +49,33 @@ paths:
       summary: AddTable
       tags:
       - public
+  /admin/admin-add-user:
+    post:
+      description: '"管理员新增用户"'
+      parameters:
+      - description: 手机号
+        in: formData
+        name: phone_number
+        required: true
+        type: string
+      - description: MD5加密密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 权限
+        in: formData
+        name: perm
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: AdminAddUser
+      tags:
+      - public
   /admin/complete-table:
     get:
       description: '"结台"'
@@ -217,7 +244,7 @@ paths:
       description: '"登录"'
       parameters:
       - description: 手机号
-        in: query
+        in: formData
         name: phone_number
         required: true
         type: string
