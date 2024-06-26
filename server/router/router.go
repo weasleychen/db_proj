@@ -45,6 +45,7 @@ func SetRouter(user *gin.Engine) {
 	admin.GET("/del-table", handler.HandleDelTable)
 	admin.GET("/delete-dish", handler.HandleDeleteDish)
 	admin.GET("/get-consume-record", handler.HandleGetConsumeRecord)
+	admin.POST("/admin-add-user", handler.HandleAdminAddUser)
 
 	user.Static("/static", "/home/stdforces/static")
 }

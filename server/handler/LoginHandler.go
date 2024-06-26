@@ -13,13 +13,26 @@ import (
 // @Summary Login
 // @Description "登录"
 // @Tags public
-// @Param phone_number query string true "手机号"
+// @Param phone_number formData string true "手机号"
 // @Param password formData string true "MD5加密密码"
 // @Success 200 {json} {}
 // @Router /login [POST]
 func HandleLogin(ctx *gin.Context) {
-	// 支持三种登录方式，不过swagger只开放了phone_number
-	resp, err := msdbcallclient.CallCheckUserPassword(ctx.Query("uin"), ctx.Query("phone_number"), ctx.Query("email"), ctx.PostForm("password"))
+	// 支持三种登录方式，不过只开放了phone_number
+	phone_number := ctx.PostForm("phone_number")
+	password := ctx.PostForm("password")
+
+	if phone_number == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "phone number is empty",
+		})
+
+		util.Log("phone number is empty")
+		return
+	}
+
+	resp, err := msdbcallclient.CallCheckUserPassword("", phone_number, "", password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",
