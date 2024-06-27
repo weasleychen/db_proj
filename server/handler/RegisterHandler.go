@@ -31,6 +31,36 @@ func HandleRegister(ctx *gin.Context) {
 		Perm:        define.NormalPerm,
 	}
 
+	if user.PhoneNumber == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty phone number",
+		})
+
+		util.Log("empty phone number")
+		return
+	}
+
+	if user.Email == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty email",
+		})
+
+		util.Log("empty email")
+		return
+	}
+
+	if user.Password == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty password",
+		})
+
+		util.Log("empty password")
+		return
+	}
+
 	resp, err := msdbcallclient.CallCreateUser(user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -45,10 +75,10 @@ func HandleRegister(ctx *gin.Context) {
 	if resp.GetCode() == define.ErrorDuplicatePhoneNumber {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
-			"message": "duplicate phone_number",
+			"message": "duplicate phone_number or email",
 		})
 
-		util.Log("duplicate phone_number: %v", err)
+		util.Log("duplicate phone_number or email")
 		return
 	}
 
