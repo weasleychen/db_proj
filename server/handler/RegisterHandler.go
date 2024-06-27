@@ -43,7 +43,7 @@ func HandleRegister(ctx *gin.Context) {
 	}
 
 	if resp.GetCode() == define.ErrorDuplicatePhoneNumber {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 			"message": "duplicate phone_number",
 		})
