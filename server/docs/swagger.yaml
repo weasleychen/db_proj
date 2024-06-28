@@ -53,6 +53,11 @@ paths:
     post:
       description: '"管理员新增用户"'
       parameters:
+      - description: 用户名
+        in: formData
+        name: name
+        required: true
+        type: string
       - description: 手机号
         in: formData
         name: phone_number
@@ -160,19 +165,19 @@ paths:
       tags:
       - public
   /check-user-password:
-    get:
+    post:
       description: '"检查md5加密用户密码是否正确"'
       parameters:
       - description: uin
-        in: query
+        in: formData
         name: uin
         type: string
       - description: phone_number
-        in: query
+        in: formData
         name: phone_number
         type: string
       - description: email
-        in: query
+        in: formData
         name: email
         type: string
       - description: password
@@ -185,7 +190,7 @@ paths:
           description: OK
           schema:
             type: json
-      summary: CallCheckUserPassword
+      summary: CheckUserPassword
       tags:
       - public
   /get-dish-info:

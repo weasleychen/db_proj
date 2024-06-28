@@ -8,30 +8,32 @@ import (
 	"net/http"
 )
 
-// CallCheckUserPassword
-// @Summary CallCheckUserPassword
+// CheckUserPassword
+// @Summary CheckUserPassword
 // @Description "检查md5加密用户密码是否正确"
 // @Tags public
-// @Param uin query string false "uin"
-// @Param phone_number query string false "phone_number"
-// @Param email query string false "email"
+// @Param uin formData string false "uin"
+// @Param phone_number formData string false "phone_number"
+// @Param email formData string false "email"
 // @Param password formData string true "password"
 // @Success 200 {json} {}
-// @Router /check-user-password [GET]
+// @Router /check-user-password [POST]
 func HandleCheckUserPassword(ctx *gin.Context) {
-	if ctx.Query("uin") == "" && ctx.Query("phone_number") == "" && ctx.Query("email") == "" {
+	uin := ctx.PostForm("uin")
+	phoneNumber := ctx.PostForm("phone_number")
+	email := ctx.PostForm("email")
+	password := ctx.PostForm("password")
+
+	if uin == "" && phoneNumber == "" && email == "" {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 			"message": "argument invalid, you must choose one of (uin, phone_number, email)",
 		})
+
+		return
 	}
 
-	resp, err := msdbcallclient.CallCheckUserPassword(
-		ctx.Query("uin"),
-		ctx.Query("phone_number"),
-		ctx.Query("email"),
-		ctx.PostForm("password"),
-	)
+	resp, err := msdbcallclient.CallCheckUserPassword(uin, phoneNumber, email, password)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -69,6 +71,14 @@ func HandleCheckUserPassword(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 			"message": "password incorrect",
+		})
+		return
+	}
+
+	if resp.GetStatus() == define.ErrorArgsInvalid {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "invalid args",
 		})
 		return
 	}
