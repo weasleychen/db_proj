@@ -58,6 +58,11 @@ paths:
         name: phone_number
         required: true
         type: string
+      - description: 邮箱
+        in: formData
+        name: email
+        required: true
+        type: string
       - description: MD5加密密码
         in: formData
         name: password
