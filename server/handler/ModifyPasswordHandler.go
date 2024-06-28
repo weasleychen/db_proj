@@ -21,7 +21,11 @@ import (
 // @Success 200 {json} {}
 // @Router /modify-password [POST]
 func HandleModifyPassword(ctx *gin.Context) {
-	if ctx.Query("uin") == "" && ctx.Query("phone_number") == "" && ctx.Query("email") == "" {
+	uin := ctx.PostForm("uin")
+	phoneNumber := ctx.PostForm("phone_number")
+	email := ctx.PostForm("email")
+
+	if uin == "" && phoneNumber == "" && email == "" {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": "false",
 			"message": "arguments invalid, you must choose one of (uin, phone_number, email)",
@@ -31,7 +35,7 @@ func HandleModifyPassword(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := msdbcallclient.CallModifyPassword(ctx.Query("uin"), ctx.Query("phone_number"), ctx.Query("email"), ctx.PostForm("old_password"), ctx.PostForm("new_password"))
+	resp, err := msdbcallclient.CallModifyPassword(uin, phoneNumber, email, ctx.PostForm("old_password"), ctx.PostForm("new_password"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": "false",

@@ -104,6 +104,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "MD5加密密码",
                         "name": "password",
                         "in": "formData",
