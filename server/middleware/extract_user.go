@@ -12,7 +12,7 @@ func ExtractUser() gin.HandlerFunc {
 		if len(token) == 0 {
 			token = ctx.PostForm("token")
 			if len(token) == 0 {
-				token = ctx.GetHeader("token")
+				token = ctx.GetHeader("Authorization")
 			}
 		}
 
