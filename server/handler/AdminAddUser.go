@@ -16,6 +16,7 @@ import (
 // @Summary AdminAddUser
 // @Description "管理员新增用户"
 // @Tags public
+// @Param name formData string true "用户名"
 // @Param phone_number formData string true "手机号"
 // @Param email formData string true "邮箱"
 // @Param password formData string true "MD5加密密码"
@@ -45,12 +46,57 @@ func HandleAdminAddUser(ctx *gin.Context) {
 		return
 	}
 
+	name := ctx.PostForm("name")
+	password := ctx.PostForm("password")
+	phoneNumber := ctx.PostForm("phone_number")
+	email := ctx.PostForm("email")
+
+	if name == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty name",
+		})
+
+		util.Log("empty name")
+		return
+	}
+
+	if password == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty password",
+		})
+
+		util.Log("empty password")
+		return
+	}
+
+	if phoneNumber == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty phone_number",
+		})
+
+		util.Log("empty phone_number")
+		return
+	}
+
+	if email == "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"success": "false",
+			"message": "empty email",
+		})
+
+		util.Log("empty email")
+		return
+	}
+
 	user := model.User{
 		Uin:         util.GenNewUin(),
-		Name:        ctx.PostForm("name"),
-		Password:    ctx.PostForm("password"),
-		PhoneNumber: ctx.PostForm("phone_number"),
-		Email:       ctx.PostForm("email"),
+		Name:        name,
+		Password:    password,
+		PhoneNumber: phoneNumber,
+		Email:       email,
 		Perm:        int32(perm),
 	}
 

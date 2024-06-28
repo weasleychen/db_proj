@@ -28,6 +28,7 @@ func SetRouter(user *gin.Engine) {
 	user.POST("/register", handler.HandleRegister)
 	user.POST("/login", handler.HandleLogin)
 	user.POST("/login-by-token", handler.HandleJWTLogin)
+	user.GET("/check-user-password", handler.HandleCheckUserPassword)
 
 	// normal user with token
 	tokenUser := user.Group("/", middleware.ExtractUser())
