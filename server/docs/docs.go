@@ -97,6 +97,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "用户名",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "手机号",
                         "name": "phone_number",
                         "in": "formData",
@@ -253,30 +260,30 @@ const docTemplate = `{
             }
         },
         "/check-user-password": {
-            "get": {
+            "post": {
                 "description": "\"检查md5加密用户密码是否正确\"",
                 "tags": [
                     "public"
                 ],
-                "summary": "CallCheckUserPassword",
+                "summary": "CheckUserPassword",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "uin",
                         "name": "uin",
-                        "in": "query"
+                        "in": "formData"
                     },
                     {
                         "type": "string",
                         "description": "phone_number",
                         "name": "phone_number",
-                        "in": "query"
+                        "in": "formData"
                     },
                     {
                         "type": "string",
                         "description": "email",
                         "name": "email",
-                        "in": "query"
+                        "in": "formData"
                     },
                     {
                         "type": "string",

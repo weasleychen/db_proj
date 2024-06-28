@@ -80,7 +80,7 @@ func (server *MSDBCallServer) CheckUserPassword(ctx context.Context, req *msdbca
 		return &resp, nil
 	}
 
-	if user.Password != *req.Password {
+	if user.Password != req.GetPassword() {
 		resp.Status = util.NewType[int32](define.ErrorWrongPassword)
 	} else {
 		resp.Status = util.NewType[int32](define.OK)
