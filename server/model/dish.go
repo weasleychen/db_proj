@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type Dish struct {
 	gorm.Model
 
-	Name     string  `gorm:"column:name; type:varchar(10)" json:"name,omitempty"`
+	Name     string  `gorm:"column:name; type:varchar(30)" json:"name,omitempty"`
 	Price    float64 `gorm:"column:price; type:double" json:"price,omitempty"`
 	Discount float64 `gorm:"column:discount; type:double" json:"discount,omitempty"`
 	Detail   string  `gorm:"column:detail; type:text" json:"detail,omitempty"`
