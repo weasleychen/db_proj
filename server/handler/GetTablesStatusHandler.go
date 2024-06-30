@@ -13,7 +13,7 @@ import (
 // @Description "获得全部桌台状态"
 // @Tags public
 // @Success 200 {json} {}
-// @Router /get-tables-status [GET]
+// @Router /admin/get-tables-status [GET]
 func HandleGetTablesStatus(ctx *gin.Context) {
 	resp, err := mstablemgrclient.CallGetTablesStatus()
 
