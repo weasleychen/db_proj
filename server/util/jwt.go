@@ -19,13 +19,13 @@ func GenJWT(extraArgs ...string) string {
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 	})
 
-	result, _ := token.SignedString(define.JWTPrivateToken)
+	result, _ := token.SignedString(define.JWTPrivateToken.PublicKey)
 	return result
 }
 
 func CheckToken(tokenString string) (bool, model.User) {
 	token, err := jwt.Parse(tokenString, func(_ *jwt.Token) (interface{}, error) {
-		return &define.JWTPrivateToken.PublicKey, nil
+		return &define.JWTPrivateToken, nil
 	})
 
 	user := model.User{}
