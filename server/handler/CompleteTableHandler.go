@@ -18,7 +18,7 @@ import (
 // @Param table_id query string true "table_id"
 // @Param token query string true "token"
 // @Success 200 {json} {}
-// @Router /admin/complete-table [GET]
+// @Router /complete-table [GET]
 func HandleCompleteTable(ctx *gin.Context) {
 	tableIdString := ctx.Query("table_id")
 	tableId, err := strconv.ParseInt(tableIdString, 10, 32)
