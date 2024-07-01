@@ -106,6 +106,7 @@ func (server *MSDBCallServer) CreateUser(ctx context.Context, req *msdbcall.Crea
 
 	if err := tx.Create(&user).Error; err != nil {
 		tx.Rollback()
+		fmt.Println("err: ", err)
 		if errors.Is(err, gorm.ErrDuplicatedKey) || strings.Contains(err.Error(), "Duplicate entry") {
 			resp.Code = util.NewType[int32](define.ErrorDuplicatePhoneNumber)
 			return &resp, nil

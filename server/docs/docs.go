@@ -141,39 +141,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/complete-table": {
-            "get": {
-                "description": "\"结台\"",
-                "tags": [
-                    "public"
-                ],
-                "summary": "CompleteTable",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "table_id",
-                        "name": "table_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "json"
-                        }
-                    }
-                }
-            }
-        },
         "/admin/del-table": {
             "get": {
                 "description": "\"减台\"",
@@ -232,7 +199,7 @@ const docTemplate = `{
                 "tags": [
                     "public"
                 ],
-                "summary": "GetTurnover",
+                "summary": "GetConsumeRecord",
                 "parameters": [
                     {
                         "type": "string",
@@ -249,6 +216,23 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/get-tables-status": {
+            "get": {
+                "description": "\"获得全部桌台状态\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "GetTablesStatus",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -290,6 +274,39 @@ const docTemplate = `{
                         "description": "password",
                         "name": "password",
                         "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/complete-table": {
+            "get": {
+                "description": "\"结台\"",
+                "tags": [
+                    "public"
+                ],
+                "summary": "CompleteTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "table_id",
+                        "name": "table_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -362,23 +379,6 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "json"
-                        }
-                    }
-                }
-            }
-        },
-        "/get-tables-status": {
-            "get": {
-                "description": "\"获得全部桌台状态\"",
-                "tags": [
-                    "public"
-                ],
-                "summary": "GetTablesStatus",
                 "responses": {
                     "200": {
                         "description": "OK",

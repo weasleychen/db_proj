@@ -10,8 +10,8 @@ import (
 	"strconv"
 )
 
-// GetTurnover
-// @Summary GetTurnover
+// GetConsumeRecord
+// @Summary GetConsumeRecord
 // @Description "获取营业额"
 // @Tags public
 // @Param start query string true "start"
@@ -41,7 +41,7 @@ func HandleGetConsumeRecord(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := msdbcallclient.CallGetTurnover(uint32(start), uint32(end))
+	resp, err := msdbcallclient.CallGetConsumeRecord(uint32(start), uint32(end))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
