@@ -9,6 +9,7 @@ type ConsumeRecordJson struct {
 	Discount      float64 `json:"discount"`
 	OriginPrice   float64 `json:"origin_price"`
 	FinalPrice    float64 `json:"final_price"`
+	CompleteTableTime int64 `json:"complete_table_time"`
 }
 
 type ConsumeRecord struct {

@@ -86,28 +86,6 @@ paths:
       summary: AdminAddUser
       tags:
       - public
-  /admin/complete-table:
-    get:
-      description: '"结台"'
-      parameters:
-      - description: table_id
-        in: query
-        name: table_id
-        required: true
-        type: string
-      - description: token
-        in: query
-        name: token
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: json
-      summary: CompleteTable
-      tags:
-      - public
   /admin/del-table:
     get:
       description: '"减台"'
@@ -161,7 +139,18 @@ paths:
           description: OK
           schema:
             type: json
-      summary: GetTurnover
+      summary: GetConsumeRecord
+      tags:
+      - public
+  /admin/get-tables-status:
+    get:
+      description: '"获得全部桌台状态"'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: GetTablesStatus
       tags:
       - public
   /check-user-password:
@@ -191,6 +180,28 @@ paths:
           schema:
             type: json
       summary: CheckUserPassword
+      tags:
+      - public
+  /complete-table:
+    get:
+      description: '"结台"'
+      parameters:
+      - description: table_id
+        in: query
+        name: table_id
+        required: true
+        type: string
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: CompleteTable
       tags:
       - public
   /get-dish-info:
@@ -236,17 +247,6 @@ paths:
           schema:
             type: json
       summary: GetTableInfo
-      tags:
-      - public
-  /get-tables-status:
-    get:
-      description: '"获得全部桌台状态"'
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: json
-      summary: GetTablesStatus
       tags:
       - public
   /login:

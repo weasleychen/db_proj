@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"time"
 )
 
 type MSTableMgrServer struct {
@@ -81,6 +82,7 @@ func (server *MSTableMgrServer) CompleteTable(ctx context.Context, req *mstablem
 			Discount:      getUserDiscountResp.GetDiscount(),
 			OriginPrice:   originPrice,
 			FinalPrice:    originPrice * getUserDiscountResp.GetDiscount(),
+			CompleteTableTime: time.Now().Unix(),		
 		})
 
 		_, err = msdbcallclient.CallStoreConsumeRecord(recordJson)
